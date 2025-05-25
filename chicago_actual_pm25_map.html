@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_7226e69b9f8aa682a951f2060c321a56 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; right: 50px; width: 150px; height: 90px; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:14px; padding: 10px">
+        <p style="margin: 0; font-weight: bold;">Actual PM2.5 (μg/m³)</p>
+        <div style="background: linear-gradient(to top, 
+                    #313695 0%, #4575b4 25%, #74add1 50%, 
+                    #abd9e9 75%, #fee090 85%, #fdae61 95%, #d73027 100%);
+                    width: 20px; height: 50px; float: left; margin-right: 10px;"></div>
+        <div style="float: left;">
+            <div style="height: 12px; line-height: 12px;">49.6</div>
+            <div style="height: 26px;"></div>
+            <div style="height: 12px; line-height: 12px;">38.6</div>
+        </div>
+        </div>
+        
+    
+        <h3 align="center" style="font-size:20px"><b>Actual PM2.5 Concentrations in Chicago</b></h3>
+        
+    
+            <div class="folium-map" id="map_7226e69b9f8aa682a951f2060c321a56" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_7226e69b9f8aa682a951f2060c321a56 = L.map(
+                "map_7226e69b9f8aa682a951f2060c321a56",
+                {
+                    center: [41.8781, -87.6298],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3a602e926b31d9cb3218a4689bd28ddd = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_3a602e926b31d9cb3218a4689bd28ddd.addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+            var circle_marker_a0d00edc9b1ce1eba12734d7d73a76af = L.circleMarker(
+                [41.8728971999587, -87.8258724913966],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b9e0ed", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_a57c7759fe0f1f354250cd0c711b9b94 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_053b24c9f33860a71a97dde5aea772da = $(`<div id="html_053b24c9f33860a71a97dde5aea772da" style="width: 100.0%; height: 100.0%;">                     <b>4TH DISTRICT COURT</b><br>                     <b>Actual PM2.5:</b> 42.17 μg/m³<br>                     <b>Date:</b> 2013-03<br>                     <b>Coordinates:</b> 41.8729, -87.8259                     </div>`)[0];
+                popup_a57c7759fe0f1f354250cd0c711b9b94.setContent(html_053b24c9f33860a71a97dde5aea772da);
+            
+        
+
+        circle_marker_a0d00edc9b1ce1eba12734d7d73a76af.bindPopup(popup_a57c7759fe0f1f354250cd0c711b9b94)
+        ;
+
+        
+    
+    
+            circle_marker_a0d00edc9b1ce1eba12734d7d73a76af.bindTooltip(
+                `<div>
+                     4TH DISTRICT COURT: 42.17 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4f2ebec06c6c3cf0e18c405478d09733 = L.circleMarker(
+                [41.8721168410596, -87.8290802510295],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdb96b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_9b5c33311d50bddee3c234d5965ef472 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b7f195c19ce2f9403bbe268db5118ea1 = $(`<div id="html_b7f195c19ce2f9403bbe268db5118ea1" style="width: 100.0%; height: 100.0%;">                     <b>COM ED MAINTENANCE AREA</b><br>                     <b>Actual PM2.5:</b> 46.03 μg/m³<br>                     <b>Date:</b> 2012-12<br>                     <b>Coordinates:</b> 41.8721, -87.8291                     </div>`)[0];
+                popup_9b5c33311d50bddee3c234d5965ef472.setContent(html_b7f195c19ce2f9403bbe268db5118ea1);
+            
+        
+
+        circle_marker_4f2ebec06c6c3cf0e18c405478d09733.bindPopup(popup_9b5c33311d50bddee3c234d5965ef472)
+        ;
+
+        
+    
+    
+            circle_marker_4f2ebec06c6c3cf0e18c405478d09733.bindTooltip(
+                `<div>
+                     COM ED MAINTENANCE AREA: 46.03 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_715c8019b0142f13a7f82d42cf65310e = L.circleMarker(
+                [41.7513999786378, -87.7134881520007],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#def2f7", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_0629da2951d0e4f3cedfaa97cd89194c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3c4fccf1506cde3362900f9984c84f7b = $(`<div id="html_3c4fccf1506cde3362900f9984c84f7b" style="width: 100.0%; height: 100.0%;">                     <b>COM ED MAINTENANCE BLDG</b><br>                     <b>Actual PM2.5:</b> 42.94 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.7514, -87.7135                     </div>`)[0];
+                popup_0629da2951d0e4f3cedfaa97cd89194c.setContent(html_3c4fccf1506cde3362900f9984c84f7b);
+            
+        
+
+        circle_marker_715c8019b0142f13a7f82d42cf65310e.bindPopup(popup_0629da2951d0e4f3cedfaa97cd89194c)
+        ;
+
+        
+    
+    
+            circle_marker_715c8019b0142f13a7f82d42cf65310e.bindTooltip(
+                `<div>
+                     COM ED MAINTENANCE BLDG: 42.94 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fdd526b385b806facafe91ddd4e0b769 = L.circleMarker(
+                [41.8552431328191, -87.7524696987102],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdb96b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_4c150048cd79d8b677b3132a3babb812 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4ec27b31e0a21eeeb5ba7a03010261a7 = $(`<div id="html_4ec27b31e0a21eeeb5ba7a03010261a7" style="width: 100.0%; height: 100.0%;">                     <b>COOK COUNTY TRAILER</b><br>                     <b>Actual PM2.5:</b> 46.03 μg/m³<br>                     <b>Date:</b> 2020-12<br>                     <b>Coordinates:</b> 41.8552, -87.7525                     </div>`)[0];
+                popup_4c150048cd79d8b677b3132a3babb812.setContent(html_4ec27b31e0a21eeeb5ba7a03010261a7);
+            
+        
+
+        circle_marker_fdd526b385b806facafe91ddd4e0b769.bindPopup(popup_4c150048cd79d8b677b3132a3babb812)
+        ;
+
+        
+    
+    
+            circle_marker_fdd526b385b806facafe91ddd4e0b769.bindTooltip(
+                `<div>
+                     COOK COUNTY TRAILER: 46.03 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9f7e1f2ab7a945f6adae304d765ab28a = L.circleMarker(
+                [41.877682, -87.635027],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdb96b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_edeb772401d196d30a86aa2523b6131d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_35a81cbd474fd8f5c351ba979ea69c71 = $(`<div id="html_35a81cbd474fd8f5c351ba979ea69c71" style="width: 100.0%; height: 100.0%;">                     <b>CTA BUILDING</b><br>                     <b>Actual PM2.5:</b> 46.03 μg/m³<br>                     <b>Date:</b> 2017-12<br>                     <b>Coordinates:</b> 41.8777, -87.6350                     </div>`)[0];
+                popup_edeb772401d196d30a86aa2523b6131d.setContent(html_35a81cbd474fd8f5c351ba979ea69c71);
+            
+        
+
+        circle_marker_9f7e1f2ab7a945f6adae304d765ab28a.bindPopup(popup_edeb772401d196d30a86aa2523b6131d)
+        ;
+
+        
+    
+    
+            circle_marker_9f7e1f2ab7a945f6adae304d765ab28a.bindTooltip(
+                `<div>
+                     CTA BUILDING: 46.03 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f3150dbe8236e23100623879a905b072 = L.circleMarker(
+                [41.7827660079251, -87.8053767946675],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#74add1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_b3ec3595c1a5fd5526d3bd82ccb016fb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b44797fc474facafbe6f300eed373ebd = $(`<div id="html_b44797fc474facafbe6f300eed373ebd" style="width: 100.0%; height: 100.0%;">                     <b>GRAVES ES</b><br>                     <b>Actual PM2.5:</b> 40.80 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.7828, -87.8054                     </div>`)[0];
+                popup_b3ec3595c1a5fd5526d3bd82ccb016fb.setContent(html_b44797fc474facafbe6f300eed373ebd);
+            
+        
+
+        circle_marker_f3150dbe8236e23100623879a905b072.bindPopup(popup_b3ec3595c1a5fd5526d3bd82ccb016fb)
+        ;
+
+        
+    
+    
+            circle_marker_f3150dbe8236e23100623879a905b072.bindTooltip(
+                `<div>
+                     GRAVES ES: 40.80 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a19aac8a03c31f81aa15a0273da78a3a = L.circleMarker(
+                [41.9651934814238, -87.8762647334973],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f98e52", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_6607b83a713eca377ba4082e826fc07a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ca2af4ed24c245fa07fdd15ad656f0b6 = $(`<div id="html_ca2af4ed24c245fa07fdd15ad656f0b6" style="width: 100.0%; height: 100.0%;">                     <b>IEPA TRAILER</b><br>                     <b>Actual PM2.5:</b> 46.81 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.9652, -87.8763                     </div>`)[0];
+                popup_6607b83a713eca377ba4082e826fc07a.setContent(html_ca2af4ed24c245fa07fdd15ad656f0b6);
+            
+        
+
+        circle_marker_a19aac8a03c31f81aa15a0273da78a3a.bindPopup(popup_6607b83a713eca377ba4082e826fc07a)
+        ;
+
+        
+    
+    
+            circle_marker_a19aac8a03c31f81aa15a0273da78a3a.bindTooltip(
+                `<div>
+                     IEPA TRAILER: 46.81 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0a8d58d2ce38203fb4e7a8c9b2d914f0 = L.circleMarker(
+                [41.920009, -87.672995],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdb96b", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_74a84af82cd83ffbf36a84dec152773e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a6e734e5601677df8f506342a131a599 = $(`<div id="html_a6e734e5601677df8f506342a131a599" style="width: 100.0%; height: 100.0%;">                     <b>Kennedy Near Road 2</b><br>                     <b>Actual PM2.5:</b> 46.03 μg/m³<br>                     <b>Date:</b> 2020-12<br>                     <b>Coordinates:</b> 41.9200, -87.6730                     </div>`)[0];
+                popup_74a84af82cd83ffbf36a84dec152773e.setContent(html_a6e734e5601677df8f506342a131a599);
+            
+        
+
+        circle_marker_0a8d58d2ce38203fb4e7a8c9b2d914f0.bindPopup(popup_74a84af82cd83ffbf36a84dec152773e)
+        ;
+
+        
+    
+    
+            circle_marker_0a8d58d2ce38203fb4e7a8c9b2d914f0.bindTooltip(
+                `<div>
+                     Kennedy Near Road 2: 46.03 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b2e31e3decead5eb92caa86a5e13ebe7 = L.circleMarker(
+                [41.5786196210494, -87.5574060746384],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#eff9dd", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_4766136b10c8e45ef80039fe373edf95 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f19c6ad5af5bfb25e42243e6d8b335a8 = $(`<div id="html_f19c6ad5af5bfb25e42243e6d8b335a8" style="width: 100.0%; height: 100.0%;">                     <b>Kingery Near Road #1</b><br>                     <b>Actual PM2.5:</b> 43.48 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.5786, -87.5574                     </div>`)[0];
+                popup_4766136b10c8e45ef80039fe373edf95.setContent(html_f19c6ad5af5bfb25e42243e6d8b335a8);
+            
+        
+
+        circle_marker_b2e31e3decead5eb92caa86a5e13ebe7.bindPopup(popup_4766136b10c8e45ef80039fe373edf95)
+        ;
+
+        
+    
+    
+            circle_marker_b2e31e3decead5eb92caa86a5e13ebe7.bindTooltip(
+                `<div>
+                     Kingery Near Road #1: 43.48 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_891ecee785103c5c9646858bf82a8459 = L.circleMarker(
+                [41.8644264230095, -87.7489023825124],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdbb6d", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_0e9352441126125af4fb9cad47baaee4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8ea6a5851db32bbe93933594ef702657 = $(`<div id="html_8ea6a5851db32bbe93933594ef702657" style="width: 100.0%; height: 100.0%;">                     <b>LIBERTY SCHOOL</b><br>                     <b>Actual PM2.5:</b> 45.97 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.8644, -87.7489                     </div>`)[0];
+                popup_0e9352441126125af4fb9cad47baaee4.setContent(html_8ea6a5851db32bbe93933594ef702657);
+            
+        
+
+        circle_marker_891ecee785103c5c9646858bf82a8459.bindPopup(popup_0e9352441126125af4fb9cad47baaee4)
+        ;
+
+        
+    
+    
+            circle_marker_891ecee785103c5c9646858bf82a8459.bindTooltip(
+                `<div>
+                     LIBERTY SCHOOL: 45.97 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bdc1ef2fd5db7d9298687890d34561e2 = L.circleMarker(
+                [41.9654848301767, -87.7499280553202],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fed485", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_b1837ff3a6b7f774c98a84f1e67864e2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f3ab5f5b80e32bbf01908d047aaf6206 = $(`<div id="html_f3ab5f5b80e32bbf01908d047aaf6206" style="width: 100.0%; height: 100.0%;">                     <b>MAYFAIR PUMP STATION</b><br>                     <b>Actual PM2.5:</b> 45.42 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.9655, -87.7499                     </div>`)[0];
+                popup_b1837ff3a6b7f774c98a84f1e67864e2.setContent(html_f3ab5f5b80e32bbf01908d047aaf6206);
+            
+        
+
+        circle_marker_bdc1ef2fd5db7d9298687890d34561e2.bindPopup(popup_b1837ff3a6b7f774c98a84f1e67864e2)
+        ;
+
+        
+    
+    
+            circle_marker_bdc1ef2fd5db7d9298687890d34561e2.bindTooltip(
+                `<div>
+                     MAYFAIR PUMP STATION: 45.42 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ae2670f1140396034681af2811cd6a53 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#4574b3", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_a85539cce86b8cf37df29c6a0cf91814 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_31f9e23ce9686049a708e6f0747d2809 = $(`<div id="html_31f9e23ce9686049a708e6f0747d2809" style="width: 100.0%; height: 100.0%;">                     <b>NORTHBROOK WATER PLANT</b><br>                     <b>Actual PM2.5:</b> 39.68 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 42.1400, -87.7992                     </div>`)[0];
+                popup_a85539cce86b8cf37df29c6a0cf91814.setContent(html_31f9e23ce9686049a708e6f0747d2809);
+            
+        
+
+        circle_marker_ae2670f1140396034681af2811cd6a53.bindPopup(popup_a85539cce86b8cf37df29c6a0cf91814)
+        ;
+
+        
+    
+    
+            circle_marker_ae2670f1140396034681af2811cd6a53.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 39.68 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_eaaf4a1e6b0eca6421db982b09ee0400 = L.circleMarker(
+                [42.0602846910538, -87.8632254343829],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b2ddeb", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_c6bf55aa38cd0b3a505b3146f6af7c38 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e4c28039e5c54a8d8e71db94deac7da4 = $(`<div id="html_e4c28039e5c54a8d8e71db94deac7da4" style="width: 100.0%; height: 100.0%;">                     <b>REGIONAL OFFICE BUILDING</b><br>                     <b>Actual PM2.5:</b> 42.06 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 42.0603, -87.8632                     </div>`)[0];
+                popup_c6bf55aa38cd0b3a505b3146f6af7c38.setContent(html_e4c28039e5c54a8d8e71db94deac7da4);
+            
+        
+
+        circle_marker_eaaf4a1e6b0eca6421db982b09ee0400.bindPopup(popup_c6bf55aa38cd0b3a505b3146f6af7c38)
+        ;
+
+        
+    
+    
+            circle_marker_eaaf4a1e6b0eca6421db982b09ee0400.bindTooltip(
+                `<div>
+                     REGIONAL OFFICE BUILDING: 42.06 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_50425c95e5d158c42cc9265bbf7f80f5 = L.circleMarker(
+                [41.912739, -87.722673],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff7b3", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_31bfb7de80f010998c21c2e2d550fd54 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3d4ea4df4ac38e543d60dea2f429b444 = $(`<div id="html_3d4ea4df4ac38e543d60dea2f429b444" style="width: 100.0%; height: 100.0%;">                     <b>SPRINGFIELD PUMP STATION</b><br>                     <b>Actual PM2.5:</b> 44.35 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.9127, -87.7227                     </div>`)[0];
+                popup_31bfb7de80f010998c21c2e2d550fd54.setContent(html_3d4ea4df4ac38e543d60dea2f429b444);
+            
+        
+
+        circle_marker_50425c95e5d158c42cc9265bbf7f80f5.bindPopup(popup_31bfb7de80f010998c21c2e2d550fd54)
+        ;
+
+        
+    
+    
+            circle_marker_50425c95e5d158c42cc9265bbf7f80f5.bindTooltip(
+                `<div>
+                     SPRINGFIELD PUMP STATION: 44.35 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_410a7ec2bf6fee7c60c992c8d0e7176e = L.circleMarker(
+                [41.6709918952829, -87.7324568962847],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a50026", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_58d54d4fef7b796bc1170f780b1da6d3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ff43538f01c2947a923777892977fe4e = $(`<div id="html_ff43538f01c2947a923777892977fe4e" style="width: 100.0%; height: 100.0%;">                     <b>VILLAGE GARAGE</b><br>                     <b>Actual PM2.5:</b> 49.56 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.6710, -87.7325                     </div>`)[0];
+                popup_58d54d4fef7b796bc1170f780b1da6d3.setContent(html_ff43538f01c2947a923777892977fe4e);
+            
+        
+
+        circle_marker_410a7ec2bf6fee7c60c992c8d0e7176e.bindPopup(popup_58d54d4fef7b796bc1170f780b1da6d3)
+        ;
+
+        
+    
+    
+            circle_marker_410a7ec2bf6fee7c60c992c8d0e7176e.bindTooltip(
+                `<div>
+                     VILLAGE GARAGE: 49.56 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aae0b8cc78b55f115e71313dfbb1e553 = L.circleMarker(
+                [41.80118, -87.832349],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdc576", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_1380108d2e4a33b82aa72d160a10bd0f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_05f822422be5018265d4675b5aa12dd0 = $(`<div id="html_05f822422be5018265d4675b5aa12dd0" style="width: 100.0%; height: 100.0%;">                     <b>VILLAGE HALL</b><br>                     <b>Actual PM2.5:</b> 45.77 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.8012, -87.8323                     </div>`)[0];
+                popup_1380108d2e4a33b82aa72d160a10bd0f.setContent(html_05f822422be5018265d4675b5aa12dd0);
+            
+        
+
+        circle_marker_aae0b8cc78b55f115e71313dfbb1e553.bindPopup(popup_1380108d2e4a33b82aa72d160a10bd0f)
+        ;
+
+        
+    
+    
+            circle_marker_aae0b8cc78b55f115e71313dfbb1e553.bindTooltip(
+                `<div>
+                     VILLAGE HALL: 45.77 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_19c7c2f368526e5567ca6c03293b15f6 = L.circleMarker(
+                [41.6871654376343, -87.5393154841479],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#313695", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_7226e69b9f8aa682a951f2060c321a56);
+        
+    
+        var popup_1ff2e7008fe1ed40254b7e6382f837f7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ec07973486e8309b23c944eea556f810 = $(`<div id="html_ec07973486e8309b23c944eea556f810" style="width: 100.0%; height: 100.0%;">                     <b>WASHINGTON HS</b><br>                     <b>Actual PM2.5:</b> 38.60 μg/m³<br>                     <b>Date:</b> 2024-12<br>                     <b>Coordinates:</b> 41.6872, -87.5393                     </div>`)[0];
+                popup_1ff2e7008fe1ed40254b7e6382f837f7.setContent(html_ec07973486e8309b23c944eea556f810);
+            
+        
+
+        circle_marker_19c7c2f368526e5567ca6c03293b15f6.bindPopup(popup_1ff2e7008fe1ed40254b7e6382f837f7)
+        ;
+
+        
+    
+    
+            circle_marker_19c7c2f368526e5567ca6c03293b15f6.bindTooltip(
+                `<div>
+                     WASHINGTON HS: 38.60 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
