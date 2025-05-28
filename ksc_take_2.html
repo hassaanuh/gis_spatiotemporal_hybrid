@@ -1,0 +1,1274 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KSC Model: Actual vs Predicted PM2.5 Comparison</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+        .map-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .stats {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-size: 12px;
+            line-height: 1.4;
+            min-width: 200px;
+        }
+        .divider {
+            width: 2px;
+            background-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KSC-ConvLSTM Model: Actual vs Predicted PM2.5 Comparison</h1>
+        <p>Chicago Area Air Quality Monitoring Sites - Test Data Analysis</p>
+    </div>
+    <div class="container">
+        <div class="map-container">
+            <div class="map-title">Actual PM2.5 Values</div>
+            <div id="actual-map" class="map"></div>
+            <div class="legend">
+                <strong>PM2.5 AQI Levels</strong><br>
+                <span style="color: green;">●</span> Good (0-12 μg/m³)<br>
+                <span style="color: yellow;">●</span> Moderate (12-35.5 μg/m³)<br>
+                <span style="color: orange;">●</span> Unhealthy for Sensitive (35.5-55.5 μg/m³)<br>
+                <span style="color: red;">●</span> Unhealthy (55.5-150.5 μg/m³)<br>
+                <span style="color: purple;">●</span> Very Unhealthy (>150.5 μg/m³)
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="map-container">
+            <div class="map-title">Predicted PM2.5 Values</div>
+            <div id="predicted-map" class="map"></div>
+            <div class="stats">
+                <strong>Model Performance</strong><br>
+                Test Samples: 33<br>
+                MAE: 8.43 μg/m³<br>
+                RMSE: 10.49 μg/m³<br>
+                Mean Actual: 44.06 μg/m³<br>
+                Mean Predicted: 43.69 μg/m³<br>
+                Max Error: 34.42 μg/m³<br>
+                R² Score: 0.094
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize maps
+        var actualMap = L.map('actual-map').setView([42.139996190948, -87.7992269168431], 10);
+        var predictedMap = L.map('predicted-map').setView([42.139996190948, -87.7992269168431], 10);
+
+        // Add tile layers
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(actualMap);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(predictedMap);
+
+        // Synchronize map movements
+        actualMap.on('moveend', function() {
+            predictedMap.setView(actualMap.getCenter(), actualMap.getZoom());
+        });
+
+        predictedMap.on('moveend', function() {
+            actualMap.setView(predictedMap.getCenter(), predictedMap.getZoom());
+        });
+
+        // Function to get color based on PM2.5 value
+        function getPM25Color(value) {
+            if (value < 12) return 'green';
+            else if (value < 35.5) return 'yellow';
+            else if (value < 55.5) return 'orange';
+            else if (value < 150.5) return 'red';
+            else return 'purple';
+        }
+
+        // Function to get marker size
+        function getMarkerSize(value) {
+            return Math.max(8, Math.min(20, value * 0.3));
+        }
+
+        // Add markers for actual values
+        
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.178947368421053,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 37.26 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 5.52 μg/m³<br>
+            <b>Error %:</b> 14.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.38235294117647,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 37.94 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.85 μg/m³<br>
+            <b>Error %:</b> 12.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.126086956521739,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 37.09 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 5.70 μg/m³<br>
+            <b>Error %:</b> 15.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.577777777777778,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 38.59 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.19 μg/m³<br>
+            <b>Error %:</b> 10.9%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 8.948780487804878,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 29.83 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 12.96 μg/m³<br>
+            <b>Error %:</b> 43.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 14.952631578947368,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 49.84 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 7.06 μg/m³<br>
+            <b>Error %:</b> 14.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.7425,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 52.48 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 9.69 μg/m³<br>
+            <b>Error %:</b> 18.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.4375,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 38.12 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.66 μg/m³<br>
+            <b>Error %:</b> 12.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 13.057894736842105,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 43.53 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 0.74 μg/m³<br>
+            <b>Error %:</b> 1.7%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 16.375,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 54.58 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 11.80 μg/m³<br>
+            <b>Error %:</b> 21.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 16.05,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 53.50 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 10.71 μg/m³<br>
+            <b>Error %:</b> 20.0%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 13.507142857142858,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 45.02 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 2.24 μg/m³<br>
+            <b>Error %:</b> 5.0%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.76315789473684,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 39.21 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 3.58 μg/m³<br>
+            <b>Error %:</b> 9.1%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.228947368421052,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 50.76 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 7.98 μg/m³<br>
+            <b>Error %:</b> 15.7%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 18.9,
+            fillColor: 'red',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 63.00 μg/m³<br>
+            <b>Predicted PM2.5:</b> 52.81 μg/m³<br>
+            <b>Absolute Error:</b> 10.19 μg/m³<br>
+            <b>Error %:</b> 16.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.307894736842105,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 41.03 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 1.76 μg/m³<br>
+            <b>Error %:</b> 4.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 20,
+            fillColor: 'red',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 77.21 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 34.42 μg/m³<br>
+            <b>Error %:</b> 44.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.414285714285715,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 38.05 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.74 μg/m³<br>
+            <b>Error %:</b> 12.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.507692307692308,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 38.36 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.43 μg/m³<br>
+            <b>Error %:</b> 11.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.202499999999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 50.67 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 7.89 μg/m³<br>
+            <b>Error %:</b> 15.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 9.097297297297297,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 30.32 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 12.46 μg/m³<br>
+            <b>Error %:</b> 41.1%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 14.200000000000001,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 47.33 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.55 μg/m³<br>
+            <b>Error %:</b> 9.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 19.075862068965517,
+            fillColor: 'red',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 63.59 μg/m³<br>
+            <b>Predicted PM2.5:</b> 53.46 μg/m³<br>
+            <b>Absolute Error:</b> 10.13 μg/m³<br>
+            <b>Error %:</b> 15.9%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 10.799999999999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 36.00 μg/m³<br>
+            <b>Predicted PM2.5:</b> 51.78 μg/m³<br>
+            <b>Absolute Error:</b> 15.78 μg/m³<br>
+            <b>Error %:</b> 43.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 16.8,
+            fillColor: 'red',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 56.00 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 13.21 μg/m³<br>
+            <b>Error %:</b> 23.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 8,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 25.27 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 17.51 μg/m³<br>
+            <b>Error %:</b> 69.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 10.471428571428572,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 34.90 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 7.88 μg/m³<br>
+            <b>Error %:</b> 22.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 8.78,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 29.27 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 13.52 μg/m³<br>
+            <b>Error %:</b> 46.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 11.416666666666666,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 38.06 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 4.73 μg/m³<br>
+            <b>Error %:</b> 12.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 10.240540540540541,
+            fillColor: 'yellow',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 34.14 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 8.65 μg/m³<br>
+            <b>Error %:</b> 25.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 13.558333333333332,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 45.19 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 2.41 μg/m³<br>
+            <b>Error %:</b> 5.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 13.587804878048779,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 45.29 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 2.51 μg/m³<br>
+            <b>Error %:</b> 5.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.807692307692307,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(actualMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Actual PM2.5:</b> 52.69 μg/m³<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Absolute Error:</b> 9.91 μg/m³<br>
+            <b>Error %:</b> 18.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        // Add markers for predicted values
+        
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 37.26 μg/m³<br>
+            <b>Absolute Error:</b> 5.52 μg/m³<br>
+            <b>Error %:</b> 14.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 37.94 μg/m³<br>
+            <b>Absolute Error:</b> 4.85 μg/m³<br>
+            <b>Error %:</b> 12.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 37.09 μg/m³<br>
+            <b>Absolute Error:</b> 5.70 μg/m³<br>
+            <b>Error %:</b> 15.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 38.59 μg/m³<br>
+            <b>Absolute Error:</b> 4.19 μg/m³<br>
+            <b>Error %:</b> 10.9%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 29.83 μg/m³<br>
+            <b>Absolute Error:</b> 12.96 μg/m³<br>
+            <b>Error %:</b> 43.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 49.84 μg/m³<br>
+            <b>Absolute Error:</b> 7.06 μg/m³<br>
+            <b>Error %:</b> 14.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 52.48 μg/m³<br>
+            <b>Absolute Error:</b> 9.69 μg/m³<br>
+            <b>Error %:</b> 18.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 38.12 μg/m³<br>
+            <b>Absolute Error:</b> 4.66 μg/m³<br>
+            <b>Error %:</b> 12.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 43.53 μg/m³<br>
+            <b>Absolute Error:</b> 0.74 μg/m³<br>
+            <b>Error %:</b> 1.7%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 54.58 μg/m³<br>
+            <b>Absolute Error:</b> 11.80 μg/m³<br>
+            <b>Error %:</b> 21.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 53.50 μg/m³<br>
+            <b>Absolute Error:</b> 10.71 μg/m³<br>
+            <b>Error %:</b> 20.0%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 45.02 μg/m³<br>
+            <b>Absolute Error:</b> 2.24 μg/m³<br>
+            <b>Error %:</b> 5.0%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 39.21 μg/m³<br>
+            <b>Absolute Error:</b> 3.58 μg/m³<br>
+            <b>Error %:</b> 9.1%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 50.76 μg/m³<br>
+            <b>Absolute Error:</b> 7.98 μg/m³<br>
+            <b>Error %:</b> 15.7%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.841674,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 52.81 μg/m³<br>
+            <b>Actual PM2.5:</b> 63.00 μg/m³<br>
+            <b>Absolute Error:</b> 10.19 μg/m³<br>
+            <b>Error %:</b> 16.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 41.03 μg/m³<br>
+            <b>Absolute Error:</b> 1.76 μg/m³<br>
+            <b>Error %:</b> 4.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 77.21 μg/m³<br>
+            <b>Absolute Error:</b> 34.42 μg/m³<br>
+            <b>Error %:</b> 44.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 38.05 μg/m³<br>
+            <b>Absolute Error:</b> 4.74 μg/m³<br>
+            <b>Error %:</b> 12.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 38.36 μg/m³<br>
+            <b>Absolute Error:</b> 4.43 μg/m³<br>
+            <b>Error %:</b> 11.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 50.67 μg/m³<br>
+            <b>Absolute Error:</b> 7.89 μg/m³<br>
+            <b>Error %:</b> 15.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 30.32 μg/m³<br>
+            <b>Absolute Error:</b> 12.46 μg/m³<br>
+            <b>Error %:</b> 41.1%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 47.33 μg/m³<br>
+            <b>Absolute Error:</b> 4.55 μg/m³<br>
+            <b>Error %:</b> 9.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 16.036641,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 53.46 μg/m³<br>
+            <b>Actual PM2.5:</b> 63.59 μg/m³<br>
+            <b>Absolute Error:</b> 10.13 μg/m³<br>
+            <b>Error %:</b> 15.9%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 15.53265,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 51.78 μg/m³<br>
+            <b>Actual PM2.5:</b> 36.00 μg/m³<br>
+            <b>Absolute Error:</b> 15.78 μg/m³<br>
+            <b>Error %:</b> 43.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 56.00 μg/m³<br>
+            <b>Absolute Error:</b> 13.21 μg/m³<br>
+            <b>Error %:</b> 23.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 25.27 μg/m³<br>
+            <b>Absolute Error:</b> 17.51 μg/m³<br>
+            <b>Error %:</b> 69.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 34.90 μg/m³<br>
+            <b>Absolute Error:</b> 7.88 μg/m³<br>
+            <b>Error %:</b> 22.6%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 29.27 μg/m³<br>
+            <b>Absolute Error:</b> 13.52 μg/m³<br>
+            <b>Error %:</b> 46.2%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 38.06 μg/m³<br>
+            <b>Absolute Error:</b> 4.73 μg/m³<br>
+            <b>Error %:</b> 12.4%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 34.14 μg/m³<br>
+            <b>Absolute Error:</b> 8.65 μg/m³<br>
+            <b>Error %:</b> 25.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 45.19 μg/m³<br>
+            <b>Absolute Error:</b> 2.41 μg/m³<br>
+            <b>Error %:</b> 5.3%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 45.29 μg/m³<br>
+            <b>Absolute Error:</b> 2.51 μg/m³<br>
+            <b>Error %:</b> 5.5%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+
+        L.circleMarker([42.139996190948, -87.7992269168431], {
+            radius: 12.835959899999999,
+            fillColor: 'orange',
+            color: 'black',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(predictedMap)
+        .bindPopup(`
+            <b>Site:</b> NORTHBROOK WATER PLANT<br>
+            <b>Predicted PM2.5:</b> 42.79 μg/m³<br>
+            <b>Actual PM2.5:</b> 52.69 μg/m³<br>
+            <b>Absolute Error:</b> 9.91 μg/m³<br>
+            <b>Error %:</b> 18.8%<br>
+            <b>Coordinates:</b> 42.1400, -87.7992
+        `);
+    </script>
+</body>
+</html>

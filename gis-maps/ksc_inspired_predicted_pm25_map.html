@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_88efc32ae0ead393a5e671f51a73cf01 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div style="position: fixed; 
+                        bottom: 50px; right: 50px; width: 180px; height: 130px; 
+                        background-color: white; border:2px solid grey; z-index:9999; 
+                        font-size:12px; padding: 12px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            <p style="margin: 0 0 8px 0; font-weight: bold; text-align: center; color: #2c3e50;">KSC Predicted PM2.5 (μg/m³)</p>
+            <div style="background: linear-gradient(to top, 
+                        #313695 0%, #4575b4 25%, #74add1 50%, 
+                        #abd9e9 75%, #fee090 85%, #fdae61 95%, #d73027 100%);
+                        width: 30px; height: 70px; float: left; margin-right: 12px; border: 1px solid #ccc; border-radius: 3px;"></div>
+            <div style="float: left; height: 70px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">51.4</div>
+                <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">47.1</div>
+                <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">42.8</div>
+            </div>
+            <div style="clear: both; margin-top: 8px; font-size: 10px; text-align: center; color: #666; font-style: italic;">
+                KSC-Inspired - 13 Sites
+            </div>
+            </div>
+            
+    
+        <h3 align="center" style="font-size:22px; color: #2c3e50; margin: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);"><b>KSC-Inspired: Predicted PM2.5 Concentrations</b></h3>
+        
+    
+            <div class="folium-map" id="map_88efc32ae0ead393a5e671f51a73cf01" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_88efc32ae0ead393a5e671f51a73cf01 = L.map(
+                "map_88efc32ae0ead393a5e671f51a73cf01",
+                {
+                    center: [41.8781, -87.6298],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 9,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_9f12bd5e8f79067ec0964e1427fd611c = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_9f12bd5e8f79067ec0964e1427fd611c.addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+            var circle_marker_fec3b4255d3a1263c5d64bd6990da7ca = L.circleMarker(
+                [41.8728971999587, -87.8258724913966],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a50026", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_4314c4ace42e554d669bfdb1ee070def = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_90a308bfea5512d5b4bf357306b03e3f = $(`<div id="html_90a308bfea5512d5b4bf357306b03e3f" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         4TH DISTRICT COURT                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">51.38 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">51.29 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.09 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.2%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">21</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2013-03</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.8729, -87.8259</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_4314c4ace42e554d669bfdb1ee070def.setContent(html_90a308bfea5512d5b4bf357306b03e3f);
+            
+        
+
+        circle_marker_fec3b4255d3a1263c5d64bd6990da7ca.bindPopup(popup_4314c4ace42e554d669bfdb1ee070def)
+        ;
+
+        
+    
+    
+            circle_marker_fec3b4255d3a1263c5d64bd6990da7ca.bindTooltip(
+                `<div>
+                     4TH DISTRICT COURT: 51.4 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7351bd3639f3610b7dadbb5a7fc3242a = L.circleMarker(
+                [41.7513999786378, -87.7134881520007],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff2ac", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_83f09bbae0406e83bb3af6477fb4e7bf = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_45a116ceff90978cb74255b1dd2a2375 = $(`<div id="html_45a116ceff90978cb74255b1dd2a2375" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         COM ED MAINTENANCE BLDG                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">47.43 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">46.54 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.88 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.9%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">162</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.7514, -87.7135</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_83f09bbae0406e83bb3af6477fb4e7bf.setContent(html_45a116ceff90978cb74255b1dd2a2375);
+            
+        
+
+        circle_marker_7351bd3639f3610b7dadbb5a7fc3242a.bindPopup(popup_83f09bbae0406e83bb3af6477fb4e7bf)
+        ;
+
+        
+    
+    
+            circle_marker_7351bd3639f3610b7dadbb5a7fc3242a.bindTooltip(
+                `<div>
+                     COM ED MAINTENANCE BLDG: 47.4 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a8d1bfeb08326ecf29f7fecf292bcb36 = L.circleMarker(
+                [41.7827660079251, -87.8053767946675],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#bbe1ed", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_173132af53632c3136ddede2f6bee05a = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_c09741e0bdf6cddc1043962a08b8d00d = $(`<div id="html_c09741e0bdf6cddc1043962a08b8d00d" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         GRAVES ES                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">45.62 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">44.88 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.74 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.6%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">120</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2015-01 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.7828, -87.8054</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_173132af53632c3136ddede2f6bee05a.setContent(html_c09741e0bdf6cddc1043962a08b8d00d);
+            
+        
+
+        circle_marker_a8d1bfeb08326ecf29f7fecf292bcb36.bindPopup(popup_173132af53632c3136ddede2f6bee05a)
+        ;
+
+        
+    
+    
+            circle_marker_a8d1bfeb08326ecf29f7fecf292bcb36.bindTooltip(
+                `<div>
+                     GRAVES ES: 45.6 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a1c27d45c3610b96b7520cccdc7f2845 = L.circleMarker(
+                [41.9651934814238, -87.8762647334973],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fede8e", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_9e50488785b916c9b29be21734d11b9f = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_30a622a9ab543d78b9c8e1fefc1485c2 = $(`<div id="html_30a622a9ab543d78b9c8e1fefc1485c2" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         IEPA TRAILER                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">47.97 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">48.00 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.04 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.1%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">120</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2015-01 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.9652, -87.8763</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_9e50488785b916c9b29be21734d11b9f.setContent(html_30a622a9ab543d78b9c8e1fefc1485c2);
+            
+        
+
+        circle_marker_a1c27d45c3610b96b7520cccdc7f2845.bindPopup(popup_9e50488785b916c9b29be21734d11b9f)
+        ;
+
+        
+    
+    
+            circle_marker_a1c27d45c3610b96b7520cccdc7f2845.bindTooltip(
+                `<div>
+                     IEPA TRAILER: 48.0 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9e30d74adb9cc82addc6286fda48c49e = L.circleMarker(
+                [41.5786196210494, -87.5574060746384],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#feefa6", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_42ea0635d2b081ca5da31ea2b4af1afe = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_6ff2c08c7f73467e0cd4e9bd97f21aee = $(`<div id="html_6ff2c08c7f73467e0cd4e9bd97f21aee" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         Kingery Near Road #1                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">47.55 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">47.29 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.26 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.5%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">64</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2019-09 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.5786, -87.5574</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_42ea0635d2b081ca5da31ea2b4af1afe.setContent(html_6ff2c08c7f73467e0cd4e9bd97f21aee);
+            
+        
+
+        circle_marker_9e30d74adb9cc82addc6286fda48c49e.bindPopup(popup_42ea0635d2b081ca5da31ea2b4af1afe)
+        ;
+
+        
+    
+    
+            circle_marker_9e30d74adb9cc82addc6286fda48c49e.bindTooltip(
+                `<div>
+                     Kingery Near Road #1: 47.6 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_04a81338b947ff0095e13cfd213f15ac = L.circleMarker(
+                [41.8644264230095, -87.7489023825124],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbe9f2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_318ea7ed061b1194ea0bd117b6374a3e = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_0333bff24fc7b0a77b5b2174dd3f3320 = $(`<div id="html_0333bff24fc7b0a77b5b2174dd3f3320" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         LIBERTY SCHOOL                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">45.90 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">45.45 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.44 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.0%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">130</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2014-03 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.8644, -87.7489</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_318ea7ed061b1194ea0bd117b6374a3e.setContent(html_0333bff24fc7b0a77b5b2174dd3f3320);
+            
+        
+
+        circle_marker_04a81338b947ff0095e13cfd213f15ac.bindPopup(popup_318ea7ed061b1194ea0bd117b6374a3e)
+        ;
+
+        
+    
+    
+            circle_marker_04a81338b947ff0095e13cfd213f15ac.bindTooltip(
+                `<div>
+                     LIBERTY SCHOOL: 45.9 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2648010caf88ab75680aa2c9736e4c99 = L.circleMarker(
+                [41.9654848301767, -87.7499280553202],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c3e5f0", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_1943f7e882bf9a7c73e3effcd628bc2f = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_d03930be2d9b5000ba7777c887cf3812 = $(`<div id="html_d03930be2d9b5000ba7777c887cf3812" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         MAYFAIR PUMP STATION                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">45.75 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">44.37 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.38 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">3.1%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">120</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2015-01 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.9655, -87.7499</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_1943f7e882bf9a7c73e3effcd628bc2f.setContent(html_d03930be2d9b5000ba7777c887cf3812);
+            
+        
+
+        circle_marker_2648010caf88ab75680aa2c9736e4c99.bindPopup(popup_1943f7e882bf9a7c73e3effcd628bc2f)
+        ;
+
+        
+    
+    
+            circle_marker_2648010caf88ab75680aa2c9736e4c99.bindTooltip(
+                `<div>
+                     MAYFAIR PUMP STATION: 45.8 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4d7c7c9e4681186295d2059191c7e151 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5a8ec1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_321f339c37a319871785155acf539b1e = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_1b869035c89f553474aa837a66f2cb7e = $(`<div id="html_1b869035c89f553474aa837a66f2cb7e" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         NORTHBROOK WATER PLANT                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">44.06 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.27 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">3.0%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">162</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">42.1400, -87.7992</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_321f339c37a319871785155acf539b1e.setContent(html_1b869035c89f553474aa837a66f2cb7e);
+            
+        
+
+        circle_marker_4d7c7c9e4681186295d2059191c7e151.bindPopup(popup_321f339c37a319871785155acf539b1e)
+        ;
+
+        
+    
+    
+            circle_marker_4d7c7c9e4681186295d2059191c7e151.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 44.1 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4cfb36b1437f6d2637e957b43fa699af = L.circleMarker(
+                [42.0602846910538, -87.8632254343829],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#92c5de", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_8d4c14dd1319e62b921be5178de78fdc = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_19b3fc52d4657282a5793cb69cc07e2a = $(`<div id="html_19b3fc52d4657282a5793cb69cc07e2a" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         REGIONAL OFFICE BUILDING                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">44.99 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">44.03 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.95 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">2.2%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">113</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2015-01 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">42.0603, -87.8632</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_8d4c14dd1319e62b921be5178de78fdc.setContent(html_19b3fc52d4657282a5793cb69cc07e2a);
+            
+        
+
+        circle_marker_4cfb36b1437f6d2637e957b43fa699af.bindPopup(popup_8d4c14dd1319e62b921be5178de78fdc)
+        ;
+
+        
+    
+    
+            circle_marker_4cfb36b1437f6d2637e957b43fa699af.bindTooltip(
+                `<div>
+                     REGIONAL OFFICE BUILDING: 45.0 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5ecf2e420e6cfed3bc35a1d1a80f91d2 = L.circleMarker(
+                [41.912739, -87.722673],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdfec2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_7f22656b28e69a1e4216faec9aac1fda = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_54b03c879e16f36070dccf926a8207e4 = $(`<div id="html_54b03c879e16f36070dccf926a8207e4" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         SPRINGFIELD PUMP STATION                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">47.02 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">46.71 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.31 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.7%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">161</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.9127, -87.7227</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_7f22656b28e69a1e4216faec9aac1fda.setContent(html_54b03c879e16f36070dccf926a8207e4);
+            
+        
+
+        circle_marker_5ecf2e420e6cfed3bc35a1d1a80f91d2.bindPopup(popup_7f22656b28e69a1e4216faec9aac1fda)
+        ;
+
+        
+    
+    
+            circle_marker_5ecf2e420e6cfed3bc35a1d1a80f91d2.bindTooltip(
+                `<div>
+                     SPRINGFIELD PUMP STATION: 47.0 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_edbefa268823c1b758a679bb582f3cfc = L.circleMarker(
+                [41.6709918952829, -87.7324568962847],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c7e7f1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_8d87a5fd96ad22f7837bab7e8d6b1c94 = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_9bab6f7d2cf95ca7e3b9e175c11d4c10 = $(`<div id="html_9bab6f7d2cf95ca7e3b9e175c11d4c10" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         VILLAGE GARAGE                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">45.82 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">45.95 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.13 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.3%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">162</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.6710, -87.7325</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_8d87a5fd96ad22f7837bab7e8d6b1c94.setContent(html_9bab6f7d2cf95ca7e3b9e175c11d4c10);
+            
+        
+
+        circle_marker_edbefa268823c1b758a679bb582f3cfc.bindPopup(popup_8d87a5fd96ad22f7837bab7e8d6b1c94)
+        ;
+
+        
+    
+    
+            circle_marker_edbefa268823c1b758a679bb582f3cfc.bindTooltip(
+                `<div>
+                     VILLAGE GARAGE: 45.8 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9090aa9a769b917c37f6aace6de0e7ab = L.circleMarker(
+                [41.80118, -87.832349],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff5af", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_9925c1edf725a31b8ce54632552d0f90 = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_ce1f3a02f88d5525c53095a918b5aedc = $(`<div id="html_ce1f3a02f88d5525c53095a918b5aedc" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         VILLAGE HALL                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">47.37 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">47.44 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.07 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">0.1%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">119</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2015-01 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.8012, -87.8323</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_9925c1edf725a31b8ce54632552d0f90.setContent(html_ce1f3a02f88d5525c53095a918b5aedc);
+            
+        
+
+        circle_marker_9090aa9a769b917c37f6aace6de0e7ab.bindPopup(popup_9925c1edf725a31b8ce54632552d0f90)
+        ;
+
+        
+    
+    
+            circle_marker_9090aa9a769b917c37f6aace6de0e7ab.bindTooltip(
+                `<div>
+                     VILLAGE HALL: 47.4 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e1114943685a3dd90fc4ee9564b0d1e0 = L.circleMarker(
+                [41.6871654376343, -87.5393154841479],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f3fbd4", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_88efc32ae0ead393a5e671f51a73cf01);
+        
+    
+        var popup_e0774753e937f3f8d8eee5e661643c82 = L.popup({
+  "maxWidth": 360,
+});
+
+        
+            
+                var html_d38b3f27bbe6bbf444ce70d78563ea8f = $(`<div id="html_d38b3f27bbe6bbf444ce70d78563ea8f" style="width: 100.0%; height: 100.0%;">                 <div style="font-family: Arial, sans-serif; width: 320px;">                     <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 10px; border-radius: 5px;">                         WASHINGTON HS                     </h4>                     <table style="width: 100%; border-collapse: collapse;">                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Predicted PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; color: #3498db; font-weight: bold;">46.76 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">KSC Actual PM2.5:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">45.67 μg/m³</td>                         </tr>                         <tr style="background-color: #fff3cd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">1.09 μg/m³</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">2.4%</td>                         </tr>                         <tr style="background-color: #f8f9fa;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Sequences:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6;">146</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date Range:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">2011-07 to 2024-12</td>                         </tr>                         <tr style="background-color: #e3f2fd;">                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Model:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">KSC-Inspired</td>                         </tr>                         <tr>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                             <td style="padding: 8px; border: 1px solid #dee2e6; font-size: 11px;">41.6872, -87.5393</td>                         </tr>                     </table>                 </div>                 </div>`)[0];
+                popup_e0774753e937f3f8d8eee5e661643c82.setContent(html_d38b3f27bbe6bbf444ce70d78563ea8f);
+            
+        
+
+        circle_marker_e1114943685a3dd90fc4ee9564b0d1e0.bindPopup(popup_e0774753e937f3f8d8eee5e661643c82)
+        ;
+
+        
+    
+    
+            circle_marker_e1114943685a3dd90fc4ee9564b0d1e0.bindTooltip(
+                `<div>
+                     WASHINGTON HS: 46.8 μg/m³ (KSC predicted)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

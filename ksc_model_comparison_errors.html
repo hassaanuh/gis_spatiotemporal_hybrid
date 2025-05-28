@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_d564bdec91fd86ebb9e06ec276bf155b {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+<h3 align="center" style="font-size:20px"><b>KSC-ConvLSTM Model: Prediction Error Distribution</b></h3>
+<p align="center" style="font-size:14px">Absolute Error by Location</p>
+    
+<div style="position: fixed; 
+            bottom: 50px; left: 50px; width: 200px; height: 120px; 
+            background-color: white; border:2px solid grey; z-index:9999; 
+            font-size:14px; padding: 10px">
+<p><b>Error Legend</b></p>
+<p><i class="fa fa-circle" style="color:blue"></i> Error < 5 μg/m³</p>
+<p><i class="fa fa-circle" style="color:purple"></i> Error 5-10 μg/m³</p>
+<p><i class="fa fa-circle" style="color:darkred"></i> Error > 10 μg/m³</p>
+<p><small>Circle size = Error magnitude</small></p>
+</div>
+    
+            <div class="folium-map" id="map_d564bdec91fd86ebb9e06ec276bf155b" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_d564bdec91fd86ebb9e06ec276bf155b = L.map(
+                "map_d564bdec91fd86ebb9e06ec276bf155b",
+                {
+                    center: [42.139996190948, -87.7992269168431],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_8ea0bb03e45fc0787b644a471bd9db21 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_8ea0bb03e45fc0787b644a471bd9db21.addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+            var circle_marker_315af7bf0eb503575cfa27e2f9c5f316 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.523375460976048, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_5cbaf1d002f5bad7c9b2210eac7100cc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f9c25ec13a098ee12e94e213eeaea497 = $(`<div id="html_f9c25ec13a098ee12e94e213eeaea497" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 5.52 μg/m³<br>         <b>Actual PM2.5:</b> 37.26 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 14.8%         </div>`)[0];
+                popup_5cbaf1d002f5bad7c9b2210eac7100cc.setContent(html_f9c25ec13a098ee12e94e213eeaea497);
+            
+        
+
+        circle_marker_315af7bf0eb503575cfa27e2f9c5f316.bindPopup(popup_5cbaf1d002f5bad7c9b2210eac7100cc)
+        ;
+
+        
+    
+    
+            circle_marker_315af7bf0eb503575cfa27e2f9c5f316.bindTooltip(
+                `<div>
+                     Error: 5.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d6ab53bee0d012c5f022c1db18294b24 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_8e98a5cffa7b036622b64e5771bd6179 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f39ca545ea6be05ac219b7a173967587 = $(`<div id="html_f39ca545ea6be05ac219b7a173967587" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.85 μg/m³<br>         <b>Actual PM2.5:</b> 37.94 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 12.8%         </div>`)[0];
+                popup_8e98a5cffa7b036622b64e5771bd6179.setContent(html_f39ca545ea6be05ac219b7a173967587);
+            
+        
+
+        circle_marker_d6ab53bee0d012c5f022c1db18294b24.bindPopup(popup_8e98a5cffa7b036622b64e5771bd6179)
+        ;
+
+        
+    
+    
+            circle_marker_d6ab53bee0d012c5f022c1db18294b24.bindTooltip(
+                `<div>
+                     Error: 4.8 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_480c557ecfbb199a8053db189af1228e = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.699576833973758, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_c3f62f8b185ef5c7823833d380b96f38 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_304c885274a0611146eaad054a2605a8 = $(`<div id="html_304c885274a0611146eaad054a2605a8" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 5.70 μg/m³<br>         <b>Actual PM2.5:</b> 37.09 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 15.4%         </div>`)[0];
+                popup_c3f62f8b185ef5c7823833d380b96f38.setContent(html_304c885274a0611146eaad054a2605a8);
+            
+        
+
+        circle_marker_480c557ecfbb199a8053db189af1228e.bindPopup(popup_c3f62f8b185ef5c7823833d380b96f38)
+        ;
+
+        
+    
+    
+            circle_marker_480c557ecfbb199a8053db189af1228e.bindTooltip(
+                `<div>
+                     Error: 5.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_66089197c058e7e7908e1e14848013e3 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_900a381bd6780166995b3adb3588149d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_41e99b7905d4a2509aa7d7ebb867cf41 = $(`<div id="html_41e99b7905d4a2509aa7d7ebb867cf41" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.19 μg/m³<br>         <b>Actual PM2.5:</b> 38.59 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 10.9%         </div>`)[0];
+                popup_900a381bd6780166995b3adb3588149d.setContent(html_41e99b7905d4a2509aa7d7ebb867cf41);
+            
+        
+
+        circle_marker_66089197c058e7e7908e1e14848013e3.bindPopup(popup_900a381bd6780166995b3adb3588149d)
+        ;
+
+        
+    
+    
+            circle_marker_66089197c058e7e7908e1e14848013e3.bindTooltip(
+                `<div>
+                     Error: 4.2 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_69b46a1236e54eec8a48a9b191c04bbf = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.95726506302996, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_d39020d63704762b5b7d6e8cd4ca78ef = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c4ef841f524a9c974022ca04c34d28a3 = $(`<div id="html_c4ef841f524a9c974022ca04c34d28a3" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 12.96 μg/m³<br>         <b>Actual PM2.5:</b> 29.83 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 43.4%         </div>`)[0];
+                popup_d39020d63704762b5b7d6e8cd4ca78ef.setContent(html_c4ef841f524a9c974022ca04c34d28a3);
+            
+        
+
+        circle_marker_69b46a1236e54eec8a48a9b191c04bbf.bindPopup(popup_d39020d63704762b5b7d6e8cd4ca78ef)
+        ;
+
+        
+    
+    
+            circle_marker_69b46a1236e54eec8a48a9b191c04bbf.bindTooltip(
+                `<div>
+                     Error: 13.0 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5096c3994d1c4992db61317f38a0fe2c = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.055571907445007, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_2a7acc7e053fc0bbb57cdd646fcc317c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_31069355f8f7d3b84ad3b15b9ef4f4ad = $(`<div id="html_31069355f8f7d3b84ad3b15b9ef4f4ad" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 7.06 μg/m³<br>         <b>Actual PM2.5:</b> 49.84 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 14.2%         </div>`)[0];
+                popup_2a7acc7e053fc0bbb57cdd646fcc317c.setContent(html_31069355f8f7d3b84ad3b15b9ef4f4ad);
+            
+        
+
+        circle_marker_5096c3994d1c4992db61317f38a0fe2c.bindPopup(popup_2a7acc7e053fc0bbb57cdd646fcc317c)
+        ;
+
+        
+    
+    
+            circle_marker_5096c3994d1c4992db61317f38a0fe2c.bindTooltip(
+                `<div>
+                     Error: 7.1 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c6a53689ed5208e9c74987e273ba5b4f = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.68846664428711, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_e84e2f8f2ecff4024a60b94bc0c3aafb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_44343f3121eba7bcaa97c66bf2f29495 = $(`<div id="html_44343f3121eba7bcaa97c66bf2f29495" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 9.69 μg/m³<br>         <b>Actual PM2.5:</b> 52.48 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 18.5%         </div>`)[0];
+                popup_e84e2f8f2ecff4024a60b94bc0c3aafb.setContent(html_44343f3121eba7bcaa97c66bf2f29495);
+            
+        
+
+        circle_marker_c6a53689ed5208e9c74987e273ba5b4f.bindPopup(popup_e84e2f8f2ecff4024a60b94bc0c3aafb)
+        ;
+
+        
+    
+    
+            circle_marker_c6a53689ed5208e9c74987e273ba5b4f.bindTooltip(
+                `<div>
+                     Error: 9.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_14b40e976fa75551cea8149d4d189f3e = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_cf9505eca6bd99bef6e3c080f32cfe6d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a1faddd9501aea6e6ccabd22d68645e9 = $(`<div id="html_a1faddd9501aea6e6ccabd22d68645e9" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.66 μg/m³<br>         <b>Actual PM2.5:</b> 38.12 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 12.2%         </div>`)[0];
+                popup_cf9505eca6bd99bef6e3c080f32cfe6d.setContent(html_a1faddd9501aea6e6ccabd22d68645e9);
+            
+        
+
+        circle_marker_14b40e976fa75551cea8149d4d189f3e.bindPopup(popup_cf9505eca6bd99bef6e3c080f32cfe6d)
+        ;
+
+        
+    
+    
+            circle_marker_14b40e976fa75551cea8149d4d189f3e.bindTooltip(
+                `<div>
+                     Error: 4.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9189999082061b70bbfa862e27051412 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_265797790620ae0da7a0077a484d36c3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ff7f2a5c8c52b5959478841ddcff6575 = $(`<div id="html_ff7f2a5c8c52b5959478841ddcff6575" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 0.74 μg/m³<br>         <b>Actual PM2.5:</b> 43.53 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 1.7%         </div>`)[0];
+                popup_265797790620ae0da7a0077a484d36c3.setContent(html_ff7f2a5c8c52b5959478841ddcff6575);
+            
+        
+
+        circle_marker_9189999082061b70bbfa862e27051412.bindPopup(popup_265797790620ae0da7a0077a484d36c3)
+        ;
+
+        
+    
+    
+            circle_marker_9189999082061b70bbfa862e27051412.bindTooltip(
+                `<div>
+                     Error: 0.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8c51c19932db8a1a0687ec45a9e7d4c3 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.796799977620443, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_e967ad7deae8d9b7073f60fc05ef9854 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f572e596e573e91a0da5d72e62041531 = $(`<div id="html_f572e596e573e91a0da5d72e62041531" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 11.80 μg/m³<br>         <b>Actual PM2.5:</b> 54.58 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 21.6%         </div>`)[0];
+                popup_e967ad7deae8d9b7073f60fc05ef9854.setContent(html_f572e596e573e91a0da5d72e62041531);
+            
+        
+
+        circle_marker_8c51c19932db8a1a0687ec45a9e7d4c3.bindPopup(popup_e967ad7deae8d9b7073f60fc05ef9854)
+        ;
+
+        
+    
+    
+            circle_marker_8c51c19932db8a1a0687ec45a9e7d4c3.bindTooltip(
+                `<div>
+                     Error: 11.8 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b541daa82d6e8c0cb87f8a7850385b6c = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.71346664428711, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_12362b6b83d7e1c0ad6943603c7aa47a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_db4ef1d2ec57f406bd1919f25dd72126 = $(`<div id="html_db4ef1d2ec57f406bd1919f25dd72126" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 10.71 μg/m³<br>         <b>Actual PM2.5:</b> 53.50 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 20.0%         </div>`)[0];
+                popup_12362b6b83d7e1c0ad6943603c7aa47a.setContent(html_db4ef1d2ec57f406bd1919f25dd72126);
+            
+        
+
+        circle_marker_b541daa82d6e8c0cb87f8a7850385b6c.bindPopup(popup_12362b6b83d7e1c0ad6943603c7aa47a)
+        ;
+
+        
+    
+    
+            circle_marker_b541daa82d6e8c0cb87f8a7850385b6c.bindTooltip(
+                `<div>
+                     Error: 10.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ca3073c905e3da86372f9c9b722a5062 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_a9b5c64608a0de8357d447651a290395 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_400c2ff88d5b58c827c8aede68a8085a = $(`<div id="html_400c2ff88d5b58c827c8aede68a8085a" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 2.24 μg/m³<br>         <b>Actual PM2.5:</b> 45.02 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 5.0%         </div>`)[0];
+                popup_a9b5c64608a0de8357d447651a290395.setContent(html_400c2ff88d5b58c827c8aede68a8085a);
+            
+        
+
+        circle_marker_ca3073c905e3da86372f9c9b722a5062.bindPopup(popup_a9b5c64608a0de8357d447651a290395)
+        ;
+
+        
+    
+    
+            circle_marker_ca3073c905e3da86372f9c9b722a5062.bindTooltip(
+                `<div>
+                     Error: 2.2 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_10fa2a2803f077f7ead9bbd9c8dd1a0c = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_87f8413d2a597348d8fb93516a4c1a41 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8b925d4de9c55cd667c366a4fd9a3254 = $(`<div id="html_8b925d4de9c55cd667c366a4fd9a3254" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 3.58 μg/m³<br>         <b>Actual PM2.5:</b> 39.21 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 9.1%         </div>`)[0];
+                popup_87f8413d2a597348d8fb93516a4c1a41.setContent(html_8b925d4de9c55cd667c366a4fd9a3254);
+            
+        
+
+        circle_marker_10fa2a2803f077f7ead9bbd9c8dd1a0c.bindPopup(popup_87f8413d2a597348d8fb93516a4c1a41)
+        ;
+
+        
+    
+    
+            circle_marker_10fa2a2803f077f7ead9bbd9c8dd1a0c.bindTooltip(
+                `<div>
+                     Error: 3.6 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_194d12d6f32634abb2f44108de462b8f = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.976624539023952, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_aefa7221546636296f860317c4a3b61b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_78962ea11a33815b40446dc2378e8529 = $(`<div id="html_78962ea11a33815b40446dc2378e8529" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 7.98 μg/m³<br>         <b>Actual PM2.5:</b> 50.76 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 15.7%         </div>`)[0];
+                popup_aefa7221546636296f860317c4a3b61b.setContent(html_78962ea11a33815b40446dc2378e8529);
+            
+        
+
+        circle_marker_194d12d6f32634abb2f44108de462b8f.bindPopup(popup_aefa7221546636296f860317c4a3b61b)
+        ;
+
+        
+    
+    
+            circle_marker_194d12d6f32634abb2f44108de462b8f.bindTooltip(
+                `<div>
+                     Error: 8.0 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b8b3e3cbd1ba3c73312e267df6addde = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.194419860839844, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_2ca69dfbe2795333e55e08365f908042 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bf2fb21409c4889a5273eedbf957acbf = $(`<div id="html_bf2fb21409c4889a5273eedbf957acbf" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 10.19 μg/m³<br>         <b>Actual PM2.5:</b> 63.00 μg/m³<br>         <b>Predicted PM2.5:</b> 52.81 μg/m³<br>         <b>Error %:</b> 16.2%         </div>`)[0];
+                popup_2ca69dfbe2795333e55e08365f908042.setContent(html_bf2fb21409c4889a5273eedbf957acbf);
+            
+        
+
+        circle_marker_0b8b3e3cbd1ba3c73312e267df6addde.bindPopup(popup_2ca69dfbe2795333e55e08365f908042)
+        ;
+
+        
+    
+    
+            circle_marker_0b8b3e3cbd1ba3c73312e267df6addde.bindTooltip(
+                `<div>
+                     Error: 10.2 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fa4f9f1e33deea64ce9cebeeddc9465f = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_bfc4b6d417f7bcf3a3b847d33277c141 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4b9e4af44518f75400e10b69f51314d5 = $(`<div id="html_4b9e4af44518f75400e10b69f51314d5" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 1.76 μg/m³<br>         <b>Actual PM2.5:</b> 41.03 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 4.3%         </div>`)[0];
+                popup_bfc4b6d417f7bcf3a3b847d33277c141.setContent(html_4b9e4af44518f75400e10b69f51314d5);
+            
+        
+
+        circle_marker_fa4f9f1e33deea64ce9cebeeddc9465f.bindPopup(popup_bfc4b6d417f7bcf3a3b847d33277c141)
+        ;
+
+        
+    
+    
+            circle_marker_fa4f9f1e33deea64ce9cebeeddc9465f.bindTooltip(
+                `<div>
+                     Error: 1.8 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8f7fa609042c9d85eab9cb71e95dc08b = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_a78373a820d08c6cff223fe5e3ce9bcc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8a58b8a9c7f551f16f47eb727372ffbc = $(`<div id="html_8a58b8a9c7f551f16f47eb727372ffbc" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 34.42 μg/m³<br>         <b>Actual PM2.5:</b> 77.21 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 44.6%         </div>`)[0];
+                popup_a78373a820d08c6cff223fe5e3ce9bcc.setContent(html_8a58b8a9c7f551f16f47eb727372ffbc);
+            
+        
+
+        circle_marker_8f7fa609042c9d85eab9cb71e95dc08b.bindPopup(popup_a78373a820d08c6cff223fe5e3ce9bcc)
+        ;
+
+        
+    
+    
+            circle_marker_8f7fa609042c9d85eab9cb71e95dc08b.bindTooltip(
+                `<div>
+                     Error: 34.4 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_72a793167a4464e62e61cd3926b445b5 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_4496fb9c2dec6f199baf01b46ab9fce7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d030d13ed25cced7ffc6982c9ea07ba0 = $(`<div id="html_d030d13ed25cced7ffc6982c9ea07ba0" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.74 μg/m³<br>         <b>Actual PM2.5:</b> 38.05 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 12.5%         </div>`)[0];
+                popup_4496fb9c2dec6f199baf01b46ab9fce7.setContent(html_d030d13ed25cced7ffc6982c9ea07ba0);
+            
+        
+
+        circle_marker_72a793167a4464e62e61cd3926b445b5.bindPopup(popup_4496fb9c2dec6f199baf01b46ab9fce7)
+        ;
+
+        
+    
+    
+            circle_marker_72a793167a4464e62e61cd3926b445b5.bindTooltip(
+                `<div>
+                     Error: 4.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_051b5a2e695d34cc1c1235a6b6c73f64 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_15e18b3df6dd9732083854fd23c7a671 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_84b88b28479db9206f1397612c2919d3 = $(`<div id="html_84b88b28479db9206f1397612c2919d3" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.43 μg/m³<br>         <b>Actual PM2.5:</b> 38.36 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 11.5%         </div>`)[0];
+                popup_15e18b3df6dd9732083854fd23c7a671.setContent(html_84b88b28479db9206f1397612c2919d3);
+            
+        
+
+        circle_marker_051b5a2e695d34cc1c1235a6b6c73f64.bindPopup(popup_15e18b3df6dd9732083854fd23c7a671)
+        ;
+
+        
+    
+    
+            circle_marker_051b5a2e695d34cc1c1235a6b6c73f64.bindTooltip(
+                `<div>
+                     Error: 4.4 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_905a4ddd4e15f90550046fbd08618013 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.888466644287107, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_c258929585df13cecc2acca4090d341d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_df1c307380cc98896de6293282f2dd69 = $(`<div id="html_df1c307380cc98896de6293282f2dd69" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 7.89 μg/m³<br>         <b>Actual PM2.5:</b> 50.67 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 15.6%         </div>`)[0];
+                popup_c258929585df13cecc2acca4090d341d.setContent(html_df1c307380cc98896de6293282f2dd69);
+            
+        
+
+        circle_marker_905a4ddd4e15f90550046fbd08618013.bindPopup(popup_c258929585df13cecc2acca4090d341d)
+        ;
+
+        
+    
+    
+            circle_marker_905a4ddd4e15f90550046fbd08618013.bindTooltip(
+                `<div>
+                     Error: 7.9 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3f4687ac06515feedbb1e451ff002459 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.462209031388568, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_c4f90c8ea343d0a2caad80451d3e9b0d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c99c6b4e17a7daddbe732ed656d3bb24 = $(`<div id="html_c99c6b4e17a7daddbe732ed656d3bb24" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 12.46 μg/m³<br>         <b>Actual PM2.5:</b> 30.32 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 41.1%         </div>`)[0];
+                popup_c4f90c8ea343d0a2caad80451d3e9b0d.setContent(html_c99c6b4e17a7daddbe732ed656d3bb24);
+            
+        
+
+        circle_marker_3f4687ac06515feedbb1e451ff002459.bindPopup(popup_c4f90c8ea343d0a2caad80451d3e9b0d)
+        ;
+
+        
+    
+    
+            circle_marker_3f4687ac06515feedbb1e451ff002459.bindTooltip(
+                `<div>
+                     Error: 12.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d1b2eb0bcaa04728d7ce7adb899f5fc4 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_7ac258c731af71968ce6eddbec8818ad = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6c1cd2f64bc6463466818d732dc87251 = $(`<div id="html_6c1cd2f64bc6463466818d732dc87251" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.55 μg/m³<br>         <b>Actual PM2.5:</b> 47.33 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 9.6%         </div>`)[0];
+                popup_7ac258c731af71968ce6eddbec8818ad.setContent(html_6c1cd2f64bc6463466818d732dc87251);
+            
+        
+
+        circle_marker_d1b2eb0bcaa04728d7ce7adb899f5fc4.bindPopup(popup_7ac258c731af71968ce6eddbec8818ad)
+        ;
+
+        
+    
+    
+            circle_marker_d1b2eb0bcaa04728d7ce7adb899f5fc4.bindTooltip(
+                `<div>
+                     Error: 4.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6cb16ad22a136a9bc795362557784f6c = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.130735857733365, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_fde0484cfb17e330061ca07d2a6c704d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_81738962b3af476398af0bc828d36e59 = $(`<div id="html_81738962b3af476398af0bc828d36e59" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 10.13 μg/m³<br>         <b>Actual PM2.5:</b> 63.59 μg/m³<br>         <b>Predicted PM2.5:</b> 53.46 μg/m³<br>         <b>Error %:</b> 15.9%         </div>`)[0];
+                popup_fde0484cfb17e330061ca07d2a6c704d.setContent(html_81738962b3af476398af0bc828d36e59);
+            
+        
+
+        circle_marker_6cb16ad22a136a9bc795362557784f6c.bindPopup(popup_fde0484cfb17e330061ca07d2a6c704d)
+        ;
+
+        
+    
+    
+            circle_marker_6cb16ad22a136a9bc795362557784f6c.bindTooltip(
+                `<div>
+                     Error: 10.1 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6524275017d30e75bb1b98e7b582f6e3 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.775501251220703, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_7ba52ad96170ad0b9ad06af335f9018c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1ce2f845ff9d921f031e01c86b1a944a = $(`<div id="html_1ce2f845ff9d921f031e01c86b1a944a" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 15.78 μg/m³<br>         <b>Actual PM2.5:</b> 36.00 μg/m³<br>         <b>Predicted PM2.5:</b> 51.78 μg/m³<br>         <b>Error %:</b> 43.8%         </div>`)[0];
+                popup_7ba52ad96170ad0b9ad06af335f9018c.setContent(html_1ce2f845ff9d921f031e01c86b1a944a);
+            
+        
+
+        circle_marker_6524275017d30e75bb1b98e7b582f6e3.bindPopup(popup_7ba52ad96170ad0b9ad06af335f9018c)
+        ;
+
+        
+    
+    
+            circle_marker_6524275017d30e75bb1b98e7b582f6e3.bindTooltip(
+                `<div>
+                     Error: 15.8 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2152f3994ec8c8e1296cc64328a69d71 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.21346664428711, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_2edb858656f33411c439a99c0b452835 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b99209f7075f70cb6f3ada6760336c7a = $(`<div id="html_b99209f7075f70cb6f3ada6760336c7a" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 13.21 μg/m³<br>         <b>Actual PM2.5:</b> 56.00 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 23.6%         </div>`)[0];
+                popup_2edb858656f33411c439a99c0b452835.setContent(html_b99209f7075f70cb6f3ada6760336c7a);
+            
+        
+
+        circle_marker_2152f3994ec8c8e1296cc64328a69d71.bindPopup(popup_2edb858656f33411c439a99c0b452835)
+        ;
+
+        
+    
+    
+            circle_marker_2152f3994ec8c8e1296cc64328a69d71.bindTooltip(
+                `<div>
+                     Error: 13.2 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e16a68adbecec8638d4026b26f57bbfa = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.511533355712892, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_17cbd3943fb99bee6a6f3a72b5953842 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6fcff11dbe6e33c18cc8d0195a588040 = $(`<div id="html_6fcff11dbe6e33c18cc8d0195a588040" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 17.51 μg/m³<br>         <b>Actual PM2.5:</b> 25.27 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 69.3%         </div>`)[0];
+                popup_17cbd3943fb99bee6a6f3a72b5953842.setContent(html_6fcff11dbe6e33c18cc8d0195a588040);
+            
+        
+
+        circle_marker_e16a68adbecec8638d4026b26f57bbfa.bindPopup(popup_17cbd3943fb99bee6a6f3a72b5953842)
+        ;
+
+        
+    
+    
+            circle_marker_e16a68adbecec8638d4026b26f57bbfa.bindTooltip(
+                `<div>
+                     Error: 17.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cbf04e26fecd2a1c21f7af29361ae141 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.8817714509509855, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_93ea6a1ee8fbfe7acf21384706345d25 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a07b35f3645b5d876a8e483b233cb3f4 = $(`<div id="html_a07b35f3645b5d876a8e483b233cb3f4" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 7.88 μg/m³<br>         <b>Actual PM2.5:</b> 34.90 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 22.6%         </div>`)[0];
+                popup_93ea6a1ee8fbfe7acf21384706345d25.setContent(html_a07b35f3645b5d876a8e483b233cb3f4);
+            
+        
+
+        circle_marker_cbf04e26fecd2a1c21f7af29361ae141.bindPopup(popup_93ea6a1ee8fbfe7acf21384706345d25)
+        ;
+
+        
+    
+    
+            circle_marker_cbf04e26fecd2a1c21f7af29361ae141.bindTooltip(
+                `<div>
+                     Error: 7.9 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_08a530a234fb51ba02c026ac15fe4bd6 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.519866689046223, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_ae9a4fe74c5b077aa527e43f118d23cc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_302a3f662c699733d5cb85364b8e14b4 = $(`<div id="html_302a3f662c699733d5cb85364b8e14b4" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 13.52 μg/m³<br>         <b>Actual PM2.5:</b> 29.27 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 46.2%         </div>`)[0];
+                popup_ae9a4fe74c5b077aa527e43f118d23cc.setContent(html_302a3f662c699733d5cb85364b8e14b4);
+            
+        
+
+        circle_marker_08a530a234fb51ba02c026ac15fe4bd6.bindPopup(popup_ae9a4fe74c5b077aa527e43f118d23cc)
+        ;
+
+        
+    
+    
+            circle_marker_08a530a234fb51ba02c026ac15fe4bd6.bindTooltip(
+                `<div>
+                     Error: 13.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aa6d885bd5a7e72dcf15cd90f2016dd4 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_7c382fa8f7f5c28002a89d78587051d7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1ddbce1a04aa4da2b9a3d1e8a22eba74 = $(`<div id="html_1ddbce1a04aa4da2b9a3d1e8a22eba74" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 4.73 μg/m³<br>         <b>Actual PM2.5:</b> 38.06 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 12.4%         </div>`)[0];
+                popup_7c382fa8f7f5c28002a89d78587051d7.setContent(html_1ddbce1a04aa4da2b9a3d1e8a22eba74);
+            
+        
+
+        circle_marker_aa6d885bd5a7e72dcf15cd90f2016dd4.bindPopup(popup_7c382fa8f7f5c28002a89d78587051d7)
+        ;
+
+        
+    
+    
+            circle_marker_aa6d885bd5a7e72dcf15cd90f2016dd4.bindTooltip(
+                `<div>
+                     Error: 4.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1e0a62981463cd34e92ef6cad207cf39 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.651398220577754, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_3e593036374e08f9738f863f9915a4b2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5606228894b6b7f781868d2cd4dedd3d = $(`<div id="html_5606228894b6b7f781868d2cd4dedd3d" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 8.65 μg/m³<br>         <b>Actual PM2.5:</b> 34.14 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 25.3%         </div>`)[0];
+                popup_3e593036374e08f9738f863f9915a4b2.setContent(html_5606228894b6b7f781868d2cd4dedd3d);
+            
+        
+
+        circle_marker_1e0a62981463cd34e92ef6cad207cf39.bindPopup(popup_3e593036374e08f9738f863f9915a4b2)
+        ;
+
+        
+    
+    
+            circle_marker_1e0a62981463cd34e92ef6cad207cf39.bindTooltip(
+                `<div>
+                     Error: 8.7 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cbd8378850aa3f543426711990c7ee1e = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_39dd10083402851fe5699afedd9dde6a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8b1965dfefaf3aa4c931582a632cad6f = $(`<div id="html_8b1965dfefaf3aa4c931582a632cad6f" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 2.41 μg/m³<br>         <b>Actual PM2.5:</b> 45.19 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 5.3%         </div>`)[0];
+                popup_39dd10083402851fe5699afedd9dde6a.setContent(html_8b1965dfefaf3aa4c931582a632cad6f);
+            
+        
+
+        circle_marker_cbd8378850aa3f543426711990c7ee1e.bindPopup(popup_39dd10083402851fe5699afedd9dde6a)
+        ;
+
+        
+    
+    
+            circle_marker_cbd8378850aa3f543426711990c7ee1e.bindTooltip(
+                `<div>
+                     Error: 2.4 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_35d930782a7de3c4e8e584f8d60ec9b4 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_80081e8dcbfe70363b5fe1cffc74e601 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5ba733be011899fdf4ed51c606e96766 = $(`<div id="html_5ba733be011899fdf4ed51c606e96766" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 2.51 μg/m³<br>         <b>Actual PM2.5:</b> 45.29 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 5.5%         </div>`)[0];
+                popup_80081e8dcbfe70363b5fe1cffc74e601.setContent(html_5ba733be011899fdf4ed51c606e96766);
+            
+        
+
+        circle_marker_35d930782a7de3c4e8e584f8d60ec9b4.bindPopup(popup_80081e8dcbfe70363b5fe1cffc74e601)
+        ;
+
+        
+    
+    
+            circle_marker_35d930782a7de3c4e8e584f8d60ec9b4.bindTooltip(
+                `<div>
+                     Error: 2.5 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_95c1dbdcbfcc0df5f1abb603be69283d = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.905774336594805, "stroke": true, "weight": 1}
+            ).addTo(map_d564bdec91fd86ebb9e06ec276bf155b);
+        
+    
+        var popup_a604e611a22c76bf26249e5a61e01e1e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d267fed319608693725670b313b8bf27 = $(`<div id="html_d267fed319608693725670b313b8bf27" style="width: 100.0%; height: 100.0%;">         <b>Site:</b> NORTHBROOK WATER PLANT<br>         <b>Absolute Error:</b> 9.91 μg/m³<br>         <b>Actual PM2.5:</b> 52.69 μg/m³<br>         <b>Predicted PM2.5:</b> 42.79 μg/m³<br>         <b>Error %:</b> 18.8%         </div>`)[0];
+                popup_a604e611a22c76bf26249e5a61e01e1e.setContent(html_d267fed319608693725670b313b8bf27);
+            
+        
+
+        circle_marker_95c1dbdcbfcc0df5f1abb603be69283d.bindPopup(popup_a604e611a22c76bf26249e5a61e01e1e)
+        ;
+
+        
+    
+    
+            circle_marker_95c1dbdcbfcc0df5f1abb603be69283d.bindTooltip(
+                `<div>
+                     Error: 9.9 μg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

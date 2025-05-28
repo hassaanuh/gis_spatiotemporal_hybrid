@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b16f747adbb1ddbe42204f4a1626c9bf {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; right: 50px; width: 170px; height: 120px; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:12px; padding: 12px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <p style="margin: 0 0 8px 0; font-weight: bold; text-align: center; color: #2c3e50;">Actual PM2.5 (μg/m³)</p>
+        <div style="background: linear-gradient(to top, 
+                    #313695 0%, #4575b4 25%, #74add1 50%, 
+                    #abd9e9 75%, #fee090 85%, #fdae61 95%, #d73027 100%);
+                    width: 30px; height: 70px; float: left; margin-right: 12px; border: 1px solid #ccc; border-radius: 3px;"></div>
+        <div style="float: left; height: 70px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">77.2</div>
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">51.2</div>
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">25.3</div>
+        </div>
+        <div style="clear: both; margin-top: 8px; font-size: 10px; text-align: center; color: #666; font-style: italic;">
+            KSC-ConvLSTM Model
+        </div>
+        </div>
+        
+    
+        <h3 align="center" style="font-size:22px; color: #2c3e50; margin: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);"><b>KSC Model: Actual PM2.5 Concentrations</b></h3>
+        
+    
+            <div class="folium-map" id="map_b16f747adbb1ddbe42204f4a1626c9bf" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_b16f747adbb1ddbe42204f4a1626c9bf = L.map(
+                "map_b16f747adbb1ddbe42204f4a1626c9bf",
+                {
+                    center: [41.8781, -87.6298],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_a8347e889cb1518299953652c6f5a349 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_a8347e889cb1518299953652c6f5a349.addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+            var circle_marker_7d4acd0fa3fd7a734c7655a42c255f95 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#85bbd9", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_eede59cb85e5e8e0cbfffd48eeee2014 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_6440be0fd3b67946f4c20ff67e38ae73 = $(`<div id="html_6440be0fd3b67946f4c20ff67e38ae73" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">37.26 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.52 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">14.8%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2024-09</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_eede59cb85e5e8e0cbfffd48eeee2014.setContent(html_6440be0fd3b67946f4c20ff67e38ae73);
+            
+        
+
+        circle_marker_7d4acd0fa3fd7a734c7655a42c255f95.bindPopup(popup_eede59cb85e5e8e0cbfffd48eeee2014)
+        ;
+
+        
+    
+    
+            circle_marker_7d4acd0fa3fd7a734c7655a42c255f95.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 37.26 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e16d47be27748c0a0b75ae0fdde2edf2 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8cc0db", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_39c7d8eb1374497d7f76fa5ba4be9d48 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_028aedd9395a417c5d1d8721e786c9e3 = $(`<div id="html_028aedd9395a417c5d1d8721e786c9e3" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">37.94 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.85 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.8%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2020-08</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_39c7d8eb1374497d7f76fa5ba4be9d48.setContent(html_028aedd9395a417c5d1d8721e786c9e3);
+            
+        
+
+        circle_marker_e16d47be27748c0a0b75ae0fdde2edf2.bindPopup(popup_39c7d8eb1374497d7f76fa5ba4be9d48)
+        ;
+
+        
+    
+    
+            circle_marker_e16d47be27748c0a0b75ae0fdde2edf2.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 37.94 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_228b95d75089ea951abfb3c67ff0b297 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#83b9d8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_d61818721bda1fcfb9805db13fcde24a = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_35e6d7c336cded019abc6ede5fbd0f88 = $(`<div id="html_35e6d7c336cded019abc6ede5fbd0f88" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">37.09 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.70 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">15.4%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2022-06</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_d61818721bda1fcfb9805db13fcde24a.setContent(html_35e6d7c336cded019abc6ede5fbd0f88);
+            
+        
+
+        circle_marker_228b95d75089ea951abfb3c67ff0b297.bindPopup(popup_d61818721bda1fcfb9805db13fcde24a)
+        ;
+
+        
+    
+    
+            circle_marker_228b95d75089ea951abfb3c67ff0b297.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 37.09 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_650fdbb47c6caed5863fa15f2aec24aa = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#92c5de", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_d1786d26fd05863aa40c20512c96b6e4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_78e1e60b31aa12b3949c33e41373a80f = $(`<div id="html_78e1e60b31aa12b3949c33e41373a80f" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">38.59 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.19 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">10.9%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2016-02</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_d1786d26fd05863aa40c20512c96b6e4.setContent(html_78e1e60b31aa12b3949c33e41373a80f);
+            
+        
+
+        circle_marker_650fdbb47c6caed5863fa15f2aec24aa.bindPopup(popup_d1786d26fd05863aa40c20512c96b6e4)
+        ;
+
+        
+    
+    
+            circle_marker_650fdbb47c6caed5863fa15f2aec24aa.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 38.59 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_149078c5981bf097948e8a2b6b75d4c7 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#426cb0", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_2d835b53e363eddb0c32e977f7330fdf = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_a2a7712ef7640521f2555806e950a648 = $(`<div id="html_a2a7712ef7640521f2555806e950a648" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">29.83 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.96 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">43.4%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2019-05</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_2d835b53e363eddb0c32e977f7330fdf.setContent(html_a2a7712ef7640521f2555806e950a648);
+            
+        
+
+        circle_marker_149078c5981bf097948e8a2b6b75d4c7.bindPopup(popup_2d835b53e363eddb0c32e977f7330fdf)
+        ;
+
+        
+    
+    
+            circle_marker_149078c5981bf097948e8a2b6b75d4c7.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 29.83 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e2b8a560c73bd38b1145a2d6a0b07f94 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f7fcce", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_fe727146961843caec5f626d5fbd196b = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_c330f156dfb278f9eb8d8ffb994b05f8 = $(`<div id="html_c330f156dfb278f9eb8d8ffb994b05f8" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">49.84 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">7.06 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">14.2%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2013-12</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_fe727146961843caec5f626d5fbd196b.setContent(html_c330f156dfb278f9eb8d8ffb994b05f8);
+            
+        
+
+        circle_marker_e2b8a560c73bd38b1145a2d6a0b07f94.bindPopup(popup_fe727146961843caec5f626d5fbd196b)
+        ;
+
+        
+    
+    
+            circle_marker_e2b8a560c73bd38b1145a2d6a0b07f94.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 49.84 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1c211f9b338a6f801184be3771ebec87 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff7b3", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_78a5833bef865ac933dd4fb4802b919e = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_28e490163a049a1318bd281ab2e4c670 = $(`<div id="html_28e490163a049a1318bd281ab2e4c670" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">52.48 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">9.69 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">18.5%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2019-12</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_78a5833bef865ac933dd4fb4802b919e.setContent(html_28e490163a049a1318bd281ab2e4c670);
+            
+        
+
+        circle_marker_1c211f9b338a6f801184be3771ebec87.bindPopup(popup_78a5833bef865ac933dd4fb4802b919e)
+        ;
+
+        
+    
+    
+            circle_marker_1c211f9b338a6f801184be3771ebec87.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 52.48 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_82797a9c16f3fbb94c2f73dc1b9a0f20 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ec2dc", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_fbf62b8cb5c8faf417cdfa7d6330744c = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_95061e95e4f288dd6543ac87ae513b2a = $(`<div id="html_95061e95e4f288dd6543ac87ae513b2a" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">38.12 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.66 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.2%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2015-10</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_fbf62b8cb5c8faf417cdfa7d6330744c.setContent(html_95061e95e4f288dd6543ac87ae513b2a);
+            
+        
+
+        circle_marker_82797a9c16f3fbb94c2f73dc1b9a0f20.bindPopup(popup_fbf62b8cb5c8faf417cdfa7d6330744c)
+        ;
+
+        
+    
+    
+            circle_marker_82797a9c16f3fbb94c2f73dc1b9a0f20.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 38.12 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5e5439b5eaf3b2fa13553da65ef8b086 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c5e6f0", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_8fa884f9c387e5317da01a97dab8cd98 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_f75d00ee46a3e7d59b96b291af2d5042 = $(`<div id="html_f75d00ee46a3e7d59b96b291af2d5042" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">43.53 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">0.74 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">1.7%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2019-11</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_8fa884f9c387e5317da01a97dab8cd98.setContent(html_f75d00ee46a3e7d59b96b291af2d5042);
+            
+        
+
+        circle_marker_5e5439b5eaf3b2fa13553da65ef8b086.bindPopup(popup_8fa884f9c387e5317da01a97dab8cd98)
+        ;
+
+        
+    
+    
+            circle_marker_5e5439b5eaf3b2fa13553da65ef8b086.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 43.53 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d6fd2ab2e7cab69ce44be369984707e8 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#feeba1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_0295e44b1dd8e871bc4bbed5c768dd16 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_bb45469d5971cad48fcb67ef86116c6f = $(`<div id="html_bb45469d5971cad48fcb67ef86116c6f" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">54.58 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">11.80 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">21.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2023-07</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_0295e44b1dd8e871bc4bbed5c768dd16.setContent(html_bb45469d5971cad48fcb67ef86116c6f);
+            
+        
+
+        circle_marker_d6fd2ab2e7cab69ce44be369984707e8.bindPopup(popup_0295e44b1dd8e871bc4bbed5c768dd16)
+        ;
+
+        
+    
+    
+            circle_marker_d6fd2ab2e7cab69ce44be369984707e8.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 54.58 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_da6c786a30525ccde2baf01d0912ecfe = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff1aa", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_b4f3da06237e6d9b265c4863b8b0f1c5 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_5a2a5ac7907937fe4ce28863f8368278 = $(`<div id="html_5a2a5ac7907937fe4ce28863f8368278" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">53.50 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">10.71 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">20.0%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2013-02</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_b4f3da06237e6d9b265c4863b8b0f1c5.setContent(html_5a2a5ac7907937fe4ce28863f8368278);
+            
+        
+
+        circle_marker_da6c786a30525ccde2baf01d0912ecfe.bindPopup(popup_b4f3da06237e6d9b265c4863b8b0f1c5)
+        ;
+
+        
+    
+    
+            circle_marker_da6c786a30525ccde2baf01d0912ecfe.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 53.50 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_667ec9ca1ef9387830978e115f9be52b = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d6eef5", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_9f14ce687f17a0098ce9613516565982 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_798f5c3b177bb5c5fe36e1ebf54eeaf6 = $(`<div id="html_798f5c3b177bb5c5fe36e1ebf54eeaf6" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">45.02 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2.24 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.0%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2018-07</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_9f14ce687f17a0098ce9613516565982.setContent(html_798f5c3b177bb5c5fe36e1ebf54eeaf6);
+            
+        
+
+        circle_marker_667ec9ca1ef9387830978e115f9be52b.bindPopup(popup_9f14ce687f17a0098ce9613516565982)
+        ;
+
+        
+    
+    
+            circle_marker_667ec9ca1ef9387830978e115f9be52b.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 45.02 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8cd99a418f0f4172d35b1e963a088e3e = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#99cae1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_d31a8a7a029cfab01f5f98fda65a7a1c = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_e4488d00eb90a36114f08ed805d96739 = $(`<div id="html_e4488d00eb90a36114f08ed805d96739" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">39.21 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">3.58 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">9.1%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2012-10</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_d31a8a7a029cfab01f5f98fda65a7a1c.setContent(html_e4488d00eb90a36114f08ed805d96739);
+            
+        
+
+        circle_marker_8cd99a418f0f4172d35b1e963a088e3e.bindPopup(popup_d31a8a7a029cfab01f5f98fda65a7a1c)
+        ;
+
+        
+    
+    
+            circle_marker_8cd99a418f0f4172d35b1e963a088e3e.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 39.21 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d2666092d65cb4b0ac2bc04b86cbbc29 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fcfec5", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_dfa44168eb675b87a8ea6e7c3ca9983e = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_c9169d11a77f4366b14eda5c6e26c02a = $(`<div id="html_c9169d11a77f4366b14eda5c6e26c02a" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">50.76 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">7.98 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">15.7%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2017-01</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_dfa44168eb675b87a8ea6e7c3ca9983e.setContent(html_c9169d11a77f4366b14eda5c6e26c02a);
+            
+        
+
+        circle_marker_d2666092d65cb4b0ac2bc04b86cbbc29.bindPopup(popup_dfa44168eb675b87a8ea6e7c3ca9983e)
+        ;
+
+        
+    
+    
+            circle_marker_d2666092d65cb4b0ac2bc04b86cbbc29.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 50.76 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_182544b7c736824f421c4f14c1c13010 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fb9d59", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_e6eabef0535115f25937da7f0ef5d417 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_04af1ad8d5207b6bd996628453ccca2b = $(`<div id="html_04af1ad8d5207b6bd996628453ccca2b" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">63.00 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">52.81 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">10.19 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">16.2%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2013-07</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_e6eabef0535115f25937da7f0ef5d417.setContent(html_04af1ad8d5207b6bd996628453ccca2b);
+            
+        
+
+        circle_marker_182544b7c736824f421c4f14c1c13010.bindPopup(popup_e6eabef0535115f25937da7f0ef5d417)
+        ;
+
+        
+    
+    
+            circle_marker_182544b7c736824f421c4f14c1c13010.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 63.00 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c522b39827bf9f110d656a486571a5a2 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#acdae9", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_3f32fb6d31488df768fc8dfccbf2f8c9 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_7854014b4d8d37a45e566d94ee653605 = $(`<div id="html_7854014b4d8d37a45e566d94ee653605" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">41.03 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">1.76 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.3%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2014-01</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_3f32fb6d31488df768fc8dfccbf2f8c9.setContent(html_7854014b4d8d37a45e566d94ee653605);
+            
+        
+
+        circle_marker_c522b39827bf9f110d656a486571a5a2.bindPopup(popup_3f32fb6d31488df768fc8dfccbf2f8c9)
+        ;
+
+        
+    
+    
+            circle_marker_c522b39827bf9f110d656a486571a5a2.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 41.03 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ba9bdeca7a8bc4f6941e0629a2abf0b4 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a50026", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_cd33479755d577917dbae611437c985c = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_3b927eead0dde86bd72a6397001c3e7f = $(`<div id="html_3b927eead0dde86bd72a6397001c3e7f" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">77.21 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">34.42 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">44.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2023-06</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_cd33479755d577917dbae611437c985c.setContent(html_3b927eead0dde86bd72a6397001c3e7f);
+            
+        
+
+        circle_marker_ba9bdeca7a8bc4f6941e0629a2abf0b4.bindPopup(popup_cd33479755d577917dbae611437c985c)
+        ;
+
+        
+    
+    
+            circle_marker_ba9bdeca7a8bc4f6941e0629a2abf0b4.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 77.21 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0ae412aff75fb7e53927a4f90ed10655 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8cc0db", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_7cd947ee879752a6df4e3dcf407bbc53 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_7d6e1a1e07fe2caeaaa9e60762001ce4 = $(`<div id="html_7d6e1a1e07fe2caeaaa9e60762001ce4" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">38.05 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.74 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.5%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2020-03</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_7cd947ee879752a6df4e3dcf407bbc53.setContent(html_7d6e1a1e07fe2caeaaa9e60762001ce4);
+            
+        
+
+        circle_marker_0ae412aff75fb7e53927a4f90ed10655.bindPopup(popup_7cd947ee879752a6df4e3dcf407bbc53)
+        ;
+
+        
+    
+    
+            circle_marker_0ae412aff75fb7e53927a4f90ed10655.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 38.05 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0303d838b3828cb67120160a484d0e1b = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#90c3dd", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_641f6f04c557f353b697d7fac36669f9 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_2954bafee54a5d09a7b6b671d4e28bf1 = $(`<div id="html_2954bafee54a5d09a7b6b671d4e28bf1" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">38.36 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.43 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">11.5%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2019-09</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_641f6f04c557f353b697d7fac36669f9.setContent(html_2954bafee54a5d09a7b6b671d4e28bf1);
+            
+        
+
+        circle_marker_0303d838b3828cb67120160a484d0e1b.bindPopup(popup_641f6f04c557f353b697d7fac36669f9)
+        ;
+
+        
+    
+    
+            circle_marker_0303d838b3828cb67120160a484d0e1b.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 38.36 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5d08ed8d779a79d52c31c78d6d88aaf1 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fcfec5", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_1e616ceb534983d29fe4b99821ef6ac1 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_79f34aff6a6f23d271670f8101ed514d = $(`<div id="html_79f34aff6a6f23d271670f8101ed514d" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">50.67 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">7.89 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">15.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2012-11</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_1e616ceb534983d29fe4b99821ef6ac1.setContent(html_79f34aff6a6f23d271670f8101ed514d);
+            
+        
+
+        circle_marker_5d08ed8d779a79d52c31c78d6d88aaf1.bindPopup(popup_1e616ceb534983d29fe4b99821ef6ac1)
+        ;
+
+        
+    
+    
+            circle_marker_5d08ed8d779a79d52c31c78d6d88aaf1.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 50.67 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_311c302539244f7a0178b03e628a83fb = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#4471b2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_d939ac6e206dfdbd7db22b995a81aff4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_6baaa385ff60fcf9bc8d9cc7be64d26b = $(`<div id="html_6baaa385ff60fcf9bc8d9cc7be64d26b" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">30.32 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.46 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">41.1%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2017-10</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_d939ac6e206dfdbd7db22b995a81aff4.setContent(html_6baaa385ff60fcf9bc8d9cc7be64d26b);
+            
+        
+
+        circle_marker_311c302539244f7a0178b03e628a83fb.bindPopup(popup_d939ac6e206dfdbd7db22b995a81aff4)
+        ;
+
+        
+    
+    
+            circle_marker_311c302539244f7a0178b03e628a83fb.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 30.32 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_58d1b584d85b61f9410879130b8eb15f = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e7f6eb", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_c114e278da8d94d5a2a0a8b9f2fff566 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_9814aa6050b3a92899c3bcc97872332e = $(`<div id="html_9814aa6050b3a92899c3bcc97872332e" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">47.33 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.55 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">9.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2013-01</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_c114e278da8d94d5a2a0a8b9f2fff566.setContent(html_9814aa6050b3a92899c3bcc97872332e);
+            
+        
+
+        circle_marker_58d1b584d85b61f9410879130b8eb15f.bindPopup(popup_c114e278da8d94d5a2a0a8b9f2fff566)
+        ;
+
+        
+    
+    
+            circle_marker_58d1b584d85b61f9410879130b8eb15f.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 47.33 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fb173b1b4280549d4702047af7d121c5 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fa9656", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_19f43338aff0b0326b189eb5e0f55328 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_e015db7061a316b66b3eaf379c04b168 = $(`<div id="html_e015db7061a316b66b3eaf379c04b168" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">63.59 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">53.46 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">10.13 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">15.9%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2012-07</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_19f43338aff0b0326b189eb5e0f55328.setContent(html_e015db7061a316b66b3eaf379c04b168);
+            
+        
+
+        circle_marker_fb173b1b4280549d4702047af7d121c5.bindPopup(popup_19f43338aff0b0326b189eb5e0f55328)
+        ;
+
+        
+    
+    
+            circle_marker_fb173b1b4280549d4702047af7d121c5.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 63.59 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7995d7a67a509053669089da83662fed = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#76afd2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_1c6a8b7e8a5218a19d82534e71d11fe9 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_2f28f73d6de12403e1755755a0bd3394 = $(`<div id="html_2f28f73d6de12403e1755755a0bd3394" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">36.00 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">51.78 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">15.78 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">43.8%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2012-04</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_1c6a8b7e8a5218a19d82534e71d11fe9.setContent(html_2f28f73d6de12403e1755755a0bd3394);
+            
+        
+
+        circle_marker_7995d7a67a509053669089da83662fed.bindPopup(popup_1c6a8b7e8a5218a19d82534e71d11fe9)
+        ;
+
+        
+    
+    
+            circle_marker_7995d7a67a509053669089da83662fed.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 36.00 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b258bbf67f37ae80d6f9b30ac161b9cb = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee294", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_7fd75909fc0ee476321de4c29b0aafaa = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_dfc0e41a4d1eb1faff3aee7177651155 = $(`<div id="html_dfc0e41a4d1eb1faff3aee7177651155" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">56.00 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">13.21 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">23.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2014-02</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_7fd75909fc0ee476321de4c29b0aafaa.setContent(html_dfc0e41a4d1eb1faff3aee7177651155);
+            
+        
+
+        circle_marker_b258bbf67f37ae80d6f9b30ac161b9cb.bindPopup(popup_7fd75909fc0ee476321de4c29b0aafaa)
+        ;
+
+        
+    
+    
+            circle_marker_b258bbf67f37ae80d6f9b30ac161b9cb.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 56.00 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b245ed56c51025f405408ec6f2378c33 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#313695", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_eb3987418c0eb03e452cf64a6ddd7e23 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_1870b4360fda0cbb65196ccec63cfd6d = $(`<div id="html_1870b4360fda0cbb65196ccec63cfd6d" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">25.27 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">17.51 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">69.3%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2024-04</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_eb3987418c0eb03e452cf64a6ddd7e23.setContent(html_1870b4360fda0cbb65196ccec63cfd6d);
+            
+        
+
+        circle_marker_b245ed56c51025f405408ec6f2378c33.bindPopup(popup_eb3987418c0eb03e452cf64a6ddd7e23)
+        ;
+
+        
+    
+    
+            circle_marker_b245ed56c51025f405408ec6f2378c33.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 25.27 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a4298d7f9c20ec02efe649a040a6caed = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6da4cc", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_5809e50ef8f95440b744fcfc53f177c4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_e4a3a5d4f8a1196c8b6ecbf21007afcf = $(`<div id="html_e4a3a5d4f8a1196c8b6ecbf21007afcf" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">34.90 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">7.88 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">22.6%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2019-08</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_5809e50ef8f95440b744fcfc53f177c4.setContent(html_e4a3a5d4f8a1196c8b6ecbf21007afcf);
+            
+        
+
+        circle_marker_a4298d7f9c20ec02efe649a040a6caed.bindPopup(popup_5809e50ef8f95440b744fcfc53f177c4)
+        ;
+
+        
+    
+    
+            circle_marker_a4298d7f9c20ec02efe649a040a6caed.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 34.90 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_721d0c3a16d7339f0a79cf1521b275d2 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#4065ac", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_33d350ab68697046885a7dc59e72a2c9 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_ae852324a7fa83e29c7cd169fd62e204 = $(`<div id="html_ae852324a7fa83e29c7cd169fd62e204" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">29.27 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">13.52 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">46.2%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2016-03</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_33d350ab68697046885a7dc59e72a2c9.setContent(html_ae852324a7fa83e29c7cd169fd62e204);
+            
+        
+
+        circle_marker_721d0c3a16d7339f0a79cf1521b275d2.bindPopup(popup_33d350ab68697046885a7dc59e72a2c9)
+        ;
+
+        
+    
+    
+            circle_marker_721d0c3a16d7339f0a79cf1521b275d2.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 29.27 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c4f8c7a62449279432851ed6ebb273f4 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ec2dc", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_1f307e807cdc4e6c8220067bb57835f4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_cf1e84cba198ed7ea60ebc22b0b03310 = $(`<div id="html_cf1e84cba198ed7ea60ebc22b0b03310" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">38.06 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">4.73 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">12.4%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2022-08</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_1f307e807cdc4e6c8220067bb57835f4.setContent(html_cf1e84cba198ed7ea60ebc22b0b03310);
+            
+        
+
+        circle_marker_c4f8c7a62449279432851ed6ebb273f4.bindPopup(popup_1f307e807cdc4e6c8220067bb57835f4)
+        ;
+
+        
+    
+    
+            circle_marker_c4f8c7a62449279432851ed6ebb273f4.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 38.06 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bf7123b6f164ab624113ff1b3ee0a091 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#659bc8", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_7d3274cdb7995827eb7a59284dc646ab = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_1969c994a31ab44c193861b090cdb31b = $(`<div id="html_1969c994a31ab44c193861b090cdb31b" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">34.14 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">8.65 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">25.3%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2020-04</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_7d3274cdb7995827eb7a59284dc646ab.setContent(html_1969c994a31ab44c193861b090cdb31b);
+            
+        
+
+        circle_marker_bf7123b6f164ab624113ff1b3ee0a091.bindPopup(popup_7d3274cdb7995827eb7a59284dc646ab)
+        ;
+
+        
+    
+    
+            circle_marker_bf7123b6f164ab624113ff1b3ee0a091.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 34.14 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e976ce6a7f1333d0f3207d9ae427bb62 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d8eff6", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_7471b11eda0929c3f561b948c8812f09 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_78b44de1a1537ad011bd34589f1a45e5 = $(`<div id="html_78b44de1a1537ad011bd34589f1a45e5" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">45.19 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2.41 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.3%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2023-01</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_7471b11eda0929c3f561b948c8812f09.setContent(html_78b44de1a1537ad011bd34589f1a45e5);
+            
+        
+
+        circle_marker_e976ce6a7f1333d0f3207d9ae427bb62.bindPopup(popup_7471b11eda0929c3f561b948c8812f09)
+        ;
+
+        
+    
+    
+            circle_marker_e976ce6a7f1333d0f3207d9ae427bb62.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 45.19 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0c2cf57a7e96dbc4c2d033580b63dab5 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d8eff6", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_9542776e173143e9f704de3ca4183c1d = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_947f5b2cece2918da253b6ffbd94e657 = $(`<div id="html_947f5b2cece2918da253b6ffbd94e657" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">45.29 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2.51 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.5%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2018-01</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_9542776e173143e9f704de3ca4183c1d.setContent(html_947f5b2cece2918da253b6ffbd94e657);
+            
+        
+
+        circle_marker_0c2cf57a7e96dbc4c2d033580b63dab5.bindPopup(popup_9542776e173143e9f704de3ca4183c1d)
+        ;
+
+        
+    
+    
+            circle_marker_0c2cf57a7e96dbc4c2d033580b63dab5.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 45.29 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3b107d68dbbdc2619a2f1400d4e61150 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff6b1", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_b16f747adbb1ddbe42204f4a1626c9bf);
+        
+    
+        var popup_68a6c2e7d2b527f0444fd135a0cd3276 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_499d376b1bdda9b957436b8a58d1b4dd = $(`<div id="html_499d376b1bdda9b957436b8a58d1b4dd" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">52.69 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.79 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Absolute Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">9.91 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">18.8%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Date:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2016-07</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_68a6c2e7d2b527f0444fd135a0cd3276.setContent(html_499d376b1bdda9b957436b8a58d1b4dd);
+            
+        
+
+        circle_marker_3b107d68dbbdc2619a2f1400d4e61150.bindPopup(popup_68a6c2e7d2b527f0444fd135a0cd3276)
+        ;
+
+        
+    
+    
+            circle_marker_3b107d68dbbdc2619a2f1400d4e61150.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 52.69 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

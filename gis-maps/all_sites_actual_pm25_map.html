@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_21f0de5f03361b9db4a3428be3c6a83c {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; right: 50px; width: 170px; height: 120px; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:12px; padding: 12px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <p style="margin: 0 0 8px 0; font-weight: bold; text-align: center; color: #2c3e50;">Actual PM2.5 (μg/m³)</p>
+        <div style="background: linear-gradient(to top, 
+                    #313695 0%, #4575b4 25%, #74add1 50%, 
+                    #abd9e9 75%, #fee090 85%, #fdae61 95%, #d73027 100%);
+                    width: 30px; height: 70px; float: left; margin-right: 12px; border: 1px solid #ccc; border-radius: 3px;"></div>
+        <div style="float: left; height: 70px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">42.8</div>
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">42.7</div>
+            <div style="font-size: 11px; font-weight: bold; color: #2c3e50;">42.7</div>
+        </div>
+        <div style="clear: both; margin-top: 8px; font-size: 10px; text-align: center; color: #666; font-style: italic;">
+            All 0 Sites
+        </div>
+        </div>
+        
+    
+        <h3 align="center" style="font-size:22px; color: #2c3e50; margin: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);"><b>All Chicago Sites: Actual PM2.5 Concentrations</b></h3>
+        
+    
+            <div class="folium-map" id="map_21f0de5f03361b9db4a3428be3c6a83c" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_21f0de5f03361b9db4a3428be3c6a83c = L.map(
+                "map_21f0de5f03361b9db4a3428be3c6a83c",
+                {
+                    center: [41.8781, -87.6298],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 9,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_9345a1250169fcd70615197ef68a7792 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_9345a1250169fcd70615197ef68a7792.addTo(map_21f0de5f03361b9db4a3428be3c6a83c);
+        
+    
+            var circle_marker_a0a7b6603e5901ca54ce5c7dcf7251b5 = L.circleMarker(
+                [42.139996190948, -87.7992269168431],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a50026", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(map_21f0de5f03361b9db4a3428be3c6a83c);
+        
+    
+        var popup_a7529f22c57d1e757a0beb96cd758cd5 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_8308a40ae1209266ad830f3dc5df2ef3 = $(`<div id="html_8308a40ae1209266ad830f3dc5df2ef3" style="width: 100.0%; height: 100.0%;">                     <div style="font-family: Arial, sans-serif; width: 280px;">                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; text-align: center;">NORTHBROOK WATER PLANT</h4>                         <table style="width: 100%; border-collapse: collapse;">                             <tr style="background-color: #e8f5e8;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Avg Actual PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6; color: #e74c3c; font-weight: bold;">42.79 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Avg Predicted PM2.5:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.65 μg/m³</td>                             </tr>                             <tr style="background-color: #fff3cd;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Avg Error:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">2.45 μg/m³</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Error %:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">5.7%</td>                             </tr>                             <tr style="background-color: #f8f9fa;">                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Data Points:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">162</td>                             </tr>                             <tr>                                 <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: bold;">Coordinates:</td>                                 <td style="padding: 8px; border: 1px solid #dee2e6;">42.1400, -87.7992</td>                             </tr>                         </table>                     </div>                     </div>`)[0];
+                popup_a7529f22c57d1e757a0beb96cd758cd5.setContent(html_8308a40ae1209266ad830f3dc5df2ef3);
+            
+        
+
+        circle_marker_a0a7b6603e5901ca54ce5c7dcf7251b5.bindPopup(popup_a7529f22c57d1e757a0beb96cd758cd5)
+        ;
+
+        
+    
+    
+            circle_marker_a0a7b6603e5901ca54ce5c7dcf7251b5.bindTooltip(
+                `<div>
+                     NORTHBROOK WATER PLANT: 42.79 μg/m³ (actual)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
